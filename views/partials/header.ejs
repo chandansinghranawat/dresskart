@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="DressKart India - Premium petroleum uniforms, caps, bags and accessories."
+  >
+
+  <title><%= title || 'DressKart India' %></title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<!-- Announcement Bar -->
+<div class="top-bar">
+  <div class="container top-bar-inner">
+
+    <div class="top-bar-contact">
+      <a href="tel:+917877681385">
+        <i class="fa-solid fa-phone"></i>
+        <span>+91 7877681385</span>
+      </a>
+
+      <a href="mailto:Dresskartindia@gmail.com">
+        <i class="fa-solid fa-envelope"></i>
+        <span>Dresskartindia@gmail.com</span>
+      </a>
+    </div>
+
+    <div class="top-bar-offer">
+      <i class="fa-solid fa-truck-fast"></i>
+      <span>Free shipping on orders above ₹999</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- Main Header -->
+<header class="site-header">
+
+  <div class="container header-main">
+
+    <!-- Brand -->
+    <a href="/" class="brand" aria-label="DressKart India Home">
+
+      <span class="brand-symbol">
+        <i class="fa-solid fa-shirt"></i>
+      </span>
+
+      <span class="brand-content">
+        <span class="brand-name">
+          Dress<span>Kart</span>
+        </span>
+
+        <span class="brand-tagline">
+          Uniforms & Accessories
+        </span>
+      </span>
+
+    </a>
+
+    <!-- Desktop Search -->
+    <div class="nav-search">
+
+      <form
+        action="/products"
+        method="GET"
+        class="search-form"
+      >
+
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+        <input
+          type="text"
+          name="search"
+          placeholder="Search uniforms, caps, bags..."
+          value="<%= typeof filters !== 'undefined' && filters.search ? filters.search : '' %>"
+          autocomplete="off"
+        >
+
+        <button type="submit">
+          Search
+        </button>
+
+      </form>
+
+    </div>
+
+    <!-- Header Actions -->
+    <div class="nav-actions">
+
+      <% if (user) { %>
+
+        <div class="dropdown user-dropdown">
+
+          <button
+            type="button"
+            class="nav-action-btn dropdown-trigger"
+            aria-label="Open account menu"
+          >
+            <span class="action-icon">
+              <i class="fa-regular fa-user"></i>
+            </span>
+
+            <span class="action-content">
+              <small>Hello</small>
+              <strong><%= user.name.split(' ')[0] %></strong>
+            </span>
+
+            <i class="fa-solid fa-chevron-down action-arrow"></i>
+          </button>
+
+          <div class="dropdown-menu">
+
+            <div class="dropdown-user-heading">
+              <span class="dropdown-avatar">
+                <i class="fa-solid fa-user"></i>
+              </span>
+
+              <div>
+                <strong><%= user.name %></strong>
+                <small>Welcome to DressKart</small>
+              </div>
+            </div>
+
+            <% if (user.role === 'admin') { %>
+              <a href="/admin">
+                <i class="fa-solid fa-chart-line"></i>
+                Admin Panel
+              </a>
+            <% } %>
+
+            <a href="/orders/my-orders">
+              <i class="fa-solid fa-box-open"></i>
+              My Orders
+            </a>
+
+            <a href="/auth/logout" class="logout-link">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout
+            </a>
+
+          </div>
+
+        </div>
+
+      <% } else { %>
+
+        <a href="/auth/login" class="nav-action-btn login-action">
+
+          <span class="action-icon">
+            <i class="fa-regular fa-user"></i>
+          </span>
+
+          <span class="action-content">
+            <small>Hello</small>
+            <strong>Login</strong>
+          </span>
+
+        </a>
+
+      <% } %>
+
+      <a href="/orders/my-orders" class="nav-action-btn orders-action">
+
+        <span class="action-icon">
+          <i class="fa-solid fa-box"></i>
+        </span>
+
+        <span class="action-content">
+          <small>Track</small>
+          <strong>Orders</strong>
+        </span>
+
+      </a>
+
+      <a href="/cart" class="cart-action">
+
+        <span class="cart-icon-wrap">
+          <i class="fa-solid fa-bag-shopping"></i>
+
+          <% if (cartCount > 0) { %>
+            <span class="cart-badge">
+              <%= cartCount %>
+            </span>
+          <% } %>
+        </span>
+
+        <span>
+          Cart
+        </span>
+
+      </a>
+
+      <button
+        type="button"
+        class="hamburger"
+        id="hamburger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Mobile Search -->
+  <div class="mobile-search container">
+
+    <form action="/products" method="GET" class="search-form">
+
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+      <input
+        type="text"
+        name="search"
+        placeholder="Search DressKart..."
+        value="<%= typeof filters !== 'undefined' && filters.search ? filters.search : '' %>"
+      >
+
+      <button type="submit">
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+
+    </form>
+
+  </div>
+
+  <!-- Category Navigation -->
+  <nav class="cat-nav" id="catNav">
+
+    <div class="container category-nav-inner">
+
+      <a href="/" class="category-home">
+        <i class="fa-solid fa-house"></i>
+        Home
+      </a>
+
+      <a href="/products">
+        <i class="fa-solid fa-border-all"></i>
+        All Products
+      </a>
+
+      <a href="/products?category=petroleum-uniforms">
+        <i class="fa-solid fa-shirt"></i>
+        Uniforms
+      </a>
+
+      <a href="/products?category=caps-headwear">
+        <i class="fa-solid fa-hat-cowboy"></i>
+        Caps & Headwear
+      </a>
+
+      <a href="/products?category=bags-accessories">
+        <i class="fa-solid fa-bag-shopping"></i>
+        Bags & Accessories
+      </a>
+
+      <a href="/about">
+        <i class="fa-regular fa-building"></i>
+        About Us
+      </a>
+
+      <a href="/contact">
+        <i class="fa-regular fa-comments"></i>
+        Contact
+      </a>
+
+      <a href="/contact" class="bulk-nav-link">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        Bulk Orders
+      </a>
+
+    </div>
+
+  </nav>
+
+</header>
+
+<!-- Flash Messages -->
+<div class="flash-container">
+
+  <% if (success && success.length > 0) { %>
+
+    <div class="alert alert-success">
+
+      <span class="alert-icon">
+        <i class="fa-solid fa-check"></i>
+      </span>
+
+      <span class="alert-message">
+        <%= success %>
+      </span>
+
+      <button
+        type="button"
+        class="alert-close"
+        aria-label="Close message"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+    </div>
+
+  <% } %>
+
+  <% if (error && error.length > 0) { %>
+
+    <div class="alert alert-error">
+
+      <span class="alert-icon">
+        <i class="fa-solid fa-exclamation"></i>
+      </span>
+
+      <span class="alert-message">
+        <%= error %>
+      </span>
+
+      <button
+        type="button"
+        class="alert-close"
+        aria-label="Close message"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+    </div>
+
+  <% } %>
+
+</div>

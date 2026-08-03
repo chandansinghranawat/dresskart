@@ -1,0 +1,177 @@
+<%- include('../partials/header') %>
+
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i>
+      <a href="/products">Shop</a> <i class="fas fa-chevron-right"></i>
+      <a href="/products?category=<%= product.cat_slug %>"><%= product.category_name %></a> <i class="fas fa-chevron-right"></i>
+      <span><%= product.name %></span>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="product-detail-layout">
+
+      <!-- Product Image -->
+      <div class="product-detail-img">
+        <div class="detail-img-main">
+          <div class="product-img-placeholder large">
+            <i class="fas fa-<%= product.category_name.includes('Cap') ? 'hat-cowboy' : product.category_name.includes('Bag') ? 'shopping-bag' : 'vest' %>"></i>
+          </div>
+        </div>
+        <% if (product.original_price && product.original_price > product.price) { %>
+          <div class="detail-badge">
+            <span class="badge-sale-lg"><%= Math.round((1 - product.price/product.original_price)*100) %>% OFF</span>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-detail-info">
+        <span class="product-cat-tag"><%= product.category_name %></span>
+        <h1 class="product-title"><%= product.name %></h1>
+
+        <div class="detail-price">
+          <span class="price-lg">₹<%= product.price.toLocaleString('en-IN') %></span>
+          <% if (product.original_price && product.original_price > product.price) { %>
+            <span class="price-old-lg">₹<%= product.original_price.toLocaleString('en-IN') %></span>
+            <span class="saving">You save ₹<%= (product.original_price - product.price).toLocaleString('en-IN') %></span>
+          <% } %>
+        </div>
+
+        <div class="product-meta">
+          <span class="<%= product.stock > 0 ? 'in-stock' : 'out-of-stock' %>">
+            <i class="fas fa-<%= product.stock > 0 ? 'check-circle' : 'times-circle' %>"></i>
+            <%= product.stock > 0 ? 'In Stock' : 'Out of Stock' %>
+          </span>
+          <span><i class="fas fa-tag"></i> Brand: <%= product.brand || 'DressKart' %></span>
+        </div>
+
+        <p class="product-desc"><%= product.description %></p>
+
+        <% if (user) { %>
+        <form action="/cart/add" method="POST" class="add-to-cart-form">
+          <input type="hidden" name="product_id" value="<%= product.id %>">
+
+          <!-- Size Selection -->
+          <% if (product.sizes_arr && product.sizes_arr.length > 0) { %>
+          <div class="option-group">
+            <label>Select Size: <span class="required">*</span></label>
+            <div class="size-options">
+              <% product.sizes_arr.forEach((size, i) => { %>
+                <label class="size-btn">
+                  <input type="radio" name="size" value="<%= size.trim() %>" <%= i === 0 ? 'required' : '' %>>
+                  <span><%= size.trim() %></span>
+                </label>
+              <% }) %>
+            </div>
+          </div>
+          <% } %>
+
+          <!-- Color Selection -->
+          <% if (product.colors_arr && product.colors_arr.length > 0) { %>
+          <div class="option-group">
+            <label>Select Color: <span class="required">*</span></label>
+            <div class="color-options">
+              <% product.colors_arr.forEach((color, i) => { %>
+                <label class="color-btn">
+                  <input type="radio" name="color" value="<%= color.trim() %>" <%= i === 0 ? 'required' : '' %>>
+                  <span><%= color.trim() %></span>
+                </label>
+              <% }) %>
+            </div>
+          </div>
+          <% } %>
+
+          <!-- Quantity -->
+          <div class="option-group">
+            <label>Quantity:</label>
+            <div class="qty-input">
+              <button type="button" onclick="changeQty(-1)">-</button>
+              <input type="number" name="quantity" id="qtyInput" value="1" min="1" max="50">
+              <button type="button" onclick="changeQty(1)">+</button>
+            </div>
+          </div>
+
+          <div class="add-to-cart-btns">
+            <button type="submit" class="btn btn-primary btn-lg" <%= product.stock === 0 ? 'disabled' : '' %>>
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+            <a href="/cart" class="btn btn-outline btn-lg">
+              <i class="fas fa-shopping-cart"></i> View Cart
+            </a>
+          </div>
+        </form>
+        <% } else { %>
+          <div class="login-prompt">
+            <p><i class="fas fa-lock"></i> Please <a href="/auth/login">login</a> to add items to cart.</p>
+            <a href="/auth/login" class="btn btn-primary btn-lg">Login / Register</a>
+          </div>
+        <% } %>
+
+        <!-- Delivery Info -->
+        <div class="delivery-info">
+          <div class="delivery-item">
+            <i class="fas fa-truck"></i>
+            <div>
+              <strong>Free Delivery</strong>
+              <span>On orders above ₹999</span>
+            </div>
+          </div>
+          <div class="delivery-item">
+            <i class="fas fa-undo"></i>
+            <div>
+              <strong>Easy Returns</strong>
+              <span>7 day return policy</span>
+            </div>
+          </div>
+          <div class="delivery-item">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <strong>Genuine Products</strong>
+              <span>100% official brand uniforms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <% if (related.length > 0) { %>
+    <div class="related-section">
+      <h2>Related Products</h2>
+      <div class="products-grid">
+        <% related.forEach(product => { %>
+          <div class="product-card">
+            <a href="/products/<%= product.slug %>" class="product-img-wrap">
+              <div class="product-img-placeholder">
+                <i class="fas fa-vest"></i>
+              </div>
+            </a>
+            <div class="product-info">
+              <h3><a href="/products/<%= product.slug %>"><%= product.name %></a></h3>
+              <div class="product-price">
+                <span class="price">₹<%= product.price.toLocaleString('en-IN') %></span>
+              </div>
+              <a href="/products/<%= product.slug %>" class="btn btn-primary btn-sm">View</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+function changeQty(delta) {
+  const input = document.getElementById('qtyInput');
+  const val = parseInt(input.value) + delta;
+  if (val >= 1 && val <= 50) input.value = val;
+}
+</script>
+
+<%- include('../partials/footer') %>

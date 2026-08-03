@@ -1,0 +1,136 @@
+<%- include('../partials/header') %>
+
+<div class="page-hero">
+  <div class="container">
+    <h1 style="color: antiquewhite;">Shop All Products</h1>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>Shop</span>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="shop-layout">
+
+      <!-- Sidebar Filters -->
+      <aside class="shop-sidebar">
+        <div class="filter-card">
+          <h3>Filters</h3>
+          <form action="/products" method="GET" id="filterForm">
+            <!-- Search -->
+            <div class="filter-group">
+              <label>Search</label>
+              <input type="text" name="search" placeholder="Search products..." value="<%= filters.search || '' %>">
+            </div>
+
+            <!-- Categories -->
+            <div class="filter-group">
+              <label>Category</label>
+              <% categories.forEach(cat => { %>
+                <label class="checkbox-label">
+                  <input type="radio" name="category" value="<%= cat.slug %>" <%= filters.category === cat.slug ? 'checked' : '' %>>
+                  <%= cat.name %>
+                </label>
+              <% }) %>
+              <label class="checkbox-label">
+                <input type="radio" name="category" value="" <%= !filters.category ? 'checked' : '' %>>
+                All Categories
+              </label>
+            </div>
+
+            <!-- Price Range -->
+            <div class="filter-group">
+              <label>Price Range</label>
+              <div class="price-inputs">
+                <input type="number" name="min_price" placeholder="Min ₹" value="<%= filters.min_price || '' %>">
+                <span>-</span>
+                <input type="number" name="max_price" placeholder="Max ₹" value="<%= filters.max_price || '' %>">
+              </div>
+            </div>
+
+            <!-- Sort -->
+            <div class="filter-group">
+              <label>Sort By</label>
+              <select name="sort">
+                <option value="" <%= !filters.sort ? 'selected' : '' %>>Featured</option>
+                <option value="price_asc" <%= filters.sort === 'price_asc' ? 'selected' : '' %>>Price: Low to High</option>
+                <option value="price_desc" <%= filters.sort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
+                <option value="newest" <%= filters.sort === 'newest' ? 'selected' : '' %>>Newest</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">Apply Filters</button>
+            <a href="/products" class="btn btn-outline btn-full mt-1">Clear All</a>
+          </form>
+        </div>
+      </aside>
+
+      <!-- Products Grid -->
+      <main class="shop-main">
+        <div class="shop-header">
+          <p><strong><%= products.length %></strong> products found</p>
+          <div class="sort-mobile">
+            <select onchange="window.location.href='/products?sort='+this.value+'<%= filters.category ? '&category='+filters.category : '' %>'">
+              <option value="">Sort: Featured</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+        </div>
+
+        <% if (products.length === 0) { %>
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+            <a href="/products" class="btn btn-primary">View All Products</a>
+          </div>
+        <% } else { %>
+          <div class="products-grid">
+            <% products.forEach(product => { %>
+              <div class="product-card">
+                <a href="/products/<%= product.slug %>" class="product-img-wrap">
+                  <div class="product-img-placeholder">
+                    <i class="fas fa-<%= product.category_name.includes('Cap') ? 'hat-cowboy' : product.category_name.includes('Bag') ? 'shopping-bag' : 'vest' %>"></i>
+                  </div>
+                  <% if (product.original_price && product.original_price > product.price) { %>
+                    <span class="badge-sale">SALE</span>
+                  <% } %>
+                </a>
+                <div class="product-info">
+                  <span class="product-cat"><%= product.category_name %></span>
+                  <h3><a href="/products/<%= product.slug %>"><%= product.name %></a></h3>
+                  <div class="product-price">
+                    <span class="price">₹<%= product.price.toLocaleString('en-IN') %></span>
+                    <% if (product.original_price && product.original_price > product.price) { %>
+                      <span class="price-old">₹<%= product.original_price.toLocaleString('en-IN') %></span>
+                      <span class="discount"><%= Math.round((1 - product.price/product.original_price)*100) %>% OFF</span>
+                    <% } %>
+                  </div>
+                  <div class="product-actions">
+                    <a href="/products/<%= product.slug %>" class="btn btn-primary btn-sm">View Details</a>
+                    <% if (user) { %>
+                      <form action="/cart/add" method="POST" style="display:inline">
+                        <input type="hidden" name="product_id" value="<%= product.id %>">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-icon" title="Add to Cart">
+                          <i class="fas fa-cart-plus"></i>
+                        </button>
+                      </form>
+                    <% } else { %>
+                      <a href="/auth/login" class="btn btn-icon"><i class="fas fa-cart-plus"></i></a>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </main>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

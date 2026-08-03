@@ -1,0 +1,82 @@
+<%- include('../partials/header') %>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>Order Details</h1>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i>
+      <a href="/orders/my-orders">My Orders</a> <i class="fas fa-chevron-right"></i>
+      <span>#<%= order.order_number %></span>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="order-detail-layout">
+      <div class="order-detail-main">
+        <div class="checkout-card">
+          <div class="order-detail-header">
+            <h3>Order #<%= order.order_number %></h3>
+            <span class="order-status status-<%= order.status %>"><%= order.status.toUpperCase() %></span>
+          </div>
+          <div class="order-meta-grid">
+            <div>
+              <label>Order Date</label>
+              <span><%= new Date(order.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}) %></span>
+            </div>
+            <div>
+              <label>Payment Method</label>
+              <span><%= order.payment_method %></span>
+            </div>
+            <div>
+              <label>Payment Status</label>
+              <span class="pay-status-<%= order.payment_status %>"><%= order.payment_status.toUpperCase() %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-card">
+          <h3>Items Ordered</h3>
+          <% items.forEach(item => { %>
+            <div class="order-item-row">
+              <div class="product-img-placeholder small"><i class="fas fa-vest"></i></div>
+              <div class="order-item-info">
+                <a href="/products/<%= item.slug %>"><%= item.name %></a>
+                <small>
+                  <% if (item.size) { %>Size: <%= item.size %> | <% } %>
+                  <% if (item.color) { %>Color: <%= item.color %> | <% } %>
+                  Qty: <%= item.quantity %>
+                </small>
+              </div>
+              <span class="order-item-price">₹<%= (item.price * item.quantity).toLocaleString('en-IN') %></span>
+            </div>
+          <% }) %>
+        </div>
+
+        <div class="checkout-card">
+          <h3>Delivery Address</h3>
+          <p><i class="fas fa-map-marker-alt"></i> <%= order.shipping_address %></p>
+        </div>
+      </div>
+
+      <div class="order-detail-sidebar">
+        <div class="summary-card">
+          <h3>Order Summary</h3>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>₹<%= (order.total_amount).toLocaleString('en-IN') %></span>
+          </div>
+          <div class="summary-row total-row">
+            <strong>Total Paid</strong>
+            <strong>₹<%= order.total_amount.toLocaleString('en-IN') %></strong>
+          </div>
+          <a href="/orders/my-orders" class="btn btn-outline btn-full">← Back to Orders</a>
+          <a href="/products" class="btn btn-primary btn-full mt-1">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

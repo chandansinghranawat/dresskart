@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>My Orders</h1>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>My Orders</span>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <% if (orders.length === 0) { %>
+      <div class="empty-state">
+        <i class="fas fa-box-open"></i>
+        <h3>No orders yet</h3>
+        <p>You haven't placed any orders.</p>
+        <a href="/products" class="btn btn-primary btn-lg">Start Shopping</a>
+      </div>
+    <% } else { %>
+      <div class="orders-list">
+        <% orders.forEach(order => { %>
+          <div class="order-card">
+            <div class="order-card-header">
+              <div>
+                <strong>#<%= order.order_number %></strong>
+                <span class="order-date"><%= new Date(order.created_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></span>
+              </div>
+              <span class="order-status status-<%= order.status %>"><%= order.status.toUpperCase() %></span>
+            </div>
+            <div class="order-card-body">
+              <div class="order-info-row">
+                <span>Total Amount</span>
+                <strong>₹<%= order.total_amount.toLocaleString('en-IN') %></strong>
+              </div>
+              <div class="order-info-row">
+                <span>Payment</span>
+                <span><%= order.payment_method %> - <span class="pay-status-<%= order.payment_status %>"><%= order.payment_status %></span></span>
+              </div>
+              <div class="order-info-row">
+                <span>Delivery</span>
+                <span><%= order.shipping_address.substring(0, 50) %>...</span>
+              </div>
+            </div>
+            <div class="order-card-footer">
+              <a href="/orders/detail/<%= order.order_number %>" class="btn btn-outline btn-sm">View Details</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

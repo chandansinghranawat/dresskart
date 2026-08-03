@@ -1,0 +1,110 @@
+<%- include('../partials/header') %>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>My Cart</h1>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>Cart</span>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <% if (cartItems.length === 0) { %>
+      <div class="empty-state">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Your cart is empty</h3>
+        <p>Browse our products and add items to your cart.</p>
+        <a href="/products" class="btn btn-primary btn-lg">Continue Shopping</a>
+      </div>
+    <% } else { %>
+      <div class="cart-layout">
+        <!-- Cart Items -->
+        <div class="cart-items">
+          <div class="cart-header">
+            <h3>Cart Items (<%= cartItems.length %>)</h3>
+          </div>
+          <% cartItems.forEach(item => { %>
+            <div class="cart-item">
+              <div class="cart-item-img">
+                <div class="product-img-placeholder small">
+                  <i class="fas fa-vest"></i>
+                </div>
+              </div>
+              <div class="cart-item-info">
+                <a href="/products/<%= item.slug %>" class="cart-item-name"><%= item.name %></a>
+                <div class="cart-item-meta">
+                  <% if (item.size) { %><span>Size: <strong><%= item.size %></strong></span><% } %>
+                  <% if (item.color) { %><span>Color: <strong><%= item.color %></strong></span><% } %>
+                </div>
+                <span class="cart-item-price">₹<%= item.price.toLocaleString('en-IN') %> each</span>
+              </div>
+              <div class="cart-item-actions">
+                <form action="/cart/update/<%= item.id %>" method="POST" class="qty-form">
+                  <div class="qty-input">
+                    <button type="button" onclick="updateQty(this, -1)">-</button>
+                    <input type="number" name="quantity" value="<%= item.quantity %>" min="0" max="50" onchange="this.form.submit()">
+                    <button type="button" onclick="updateQty(this, 1)">+</button>
+                  </div>
+                </form>
+                <span class="cart-item-subtotal">₹<%= (item.price * item.quantity).toLocaleString('en-IN') %></span>
+                <form action="/cart/remove/<%= item.id %>" method="POST">
+                  <button type="submit" class="btn-remove" title="Remove"><i class="fas fa-trash"></i></button>
+                </form>
+              </div>
+            </div>
+          <% }) %>
+          <div class="cart-continue">
+            <a href="/products" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="cart-summary">
+          <div class="summary-card">
+            <h3>Order Summary</h3>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span>₹<%= total.toLocaleString('en-IN') %></span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span class="<%= shipping === 0 ? 'text-green' : '' %>">
+                <%= shipping === 0 ? 'FREE' : '₹' + shipping %>
+              </span>
+            </div>
+            <% if (shipping === 0) { %>
+              <div class="free-ship-note"><i class="fas fa-check-circle"></i> You qualify for free shipping!</div>
+            <% } else { %>
+              <div class="free-ship-note warning">Add ₹<%= (999 - total).toLocaleString('en-IN') %> more for free shipping</div>
+            <% } %>
+            <div class="summary-row total-row">
+              <strong>Total</strong>
+              <strong>₹<%= grandTotal.toLocaleString('en-IN') %></strong>
+            </div>
+            <a href="/orders/checkout" class="btn btn-primary btn-full btn-lg">
+              Proceed to Checkout <i class="fas fa-arrow-right"></i>
+            </a>
+            <div class="secure-note">
+              <i class="fas fa-lock"></i> Secure & Safe Checkout
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+function updateQty(btn, delta) {
+  const input = btn.parentElement.querySelector('input');
+  const newVal = parseInt(input.value) + delta;
+  if (newVal >= 0 && newVal <= 50) {
+    input.value = newVal;
+    input.form.submit();
+  }
+}
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo"><i class="fas fa-hard-hat"></i> Admin</div>
+    <nav class="admin-nav">
+      <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/products"><i class="fas fa-box"></i> Products</a>
+      <a href="/admin/orders"><i class="fas fa-shopping-bag"></i> Orders</a>
+      <a href="/admin/users" class="active"><i class="fas fa-users"></i> Users</a>
+      <a href="/"><i class="fas fa-store"></i> View Store</a>
+      <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Users</h1>
+      <span><%= users.length %> registered users</span>
+    </div>
+    <div class="admin-card">
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr>
+          </thead>
+          <tbody>
+            <% users.forEach(u => { %>
+              <tr>
+                <td>#<%= u.id %></td>
+                <td><%= u.name %></td>
+                <td><%= u.email %></td>
+                <td><%= u.phone || '-' %></td>
+                <td><span class="badge-<%= u.role === 'admin' ? 'admin' : 'active' %>"><%= u.role %></span></td>
+                <td><%= new Date(u.created_at).toLocaleDateString('en-IN') %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

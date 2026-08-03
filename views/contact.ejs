@@ -1,0 +1,119 @@
+<%- include('partials/header') %>
+
+<div class="page-hero">
+  <div class="container">
+    <h1 style="color: antiquewhite;">Contact Us</h1>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>Contact</span>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="contact-layout">
+      <div class="contact-info">
+        <h2>Get in Touch</h2>
+        <p>Have questions about bulk orders, product customization or BPCL/HPCL/IOCL uniform procurement? Our team is ready to help.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <h4>Factory Address</h4>
+              <p>E195-B, Riico 3rd Phase,<br>Bhilwara, Rajasthan — 311001</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+            <div>
+              <h4>Phone</h4>
+              <p><a href="tel:+917877681385">+91 7877681385</a><br><a href="tel:+919783440930">+91 9783440930</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <h4>Email</h4>
+              <p><a href="mailto:Dresskartindia@gmail.com">Dresskartindia@gmail.com</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+            <div>
+              <h4>WhatsApp</h4>
+              <p><a href="https://wa.me/917877681385">+91 7877681385</a><br>For bulk order inquiries & catalogues</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-note">
+          <i class="fas fa-info-circle"></i>
+          <p>We supply complete uniform sets for BPCL, HPCL and IOCL petrol pump stations. For franchise or bulk orders of 10+ sets, contact us directly for special pricing.</p>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap">
+        <div class="contact-card">
+          <h3>Send us a Message</h3>
+          <form class="contact-form" onsubmit="handleContact(event)">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" placeholder="+91 XXXXXXXXXX" required>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Petroleum Brand</label>
+              <select>
+                <option value="">Select Brand</option>
+                <option>BPCL (Bharat Petroleum)</option>
+                <option>HPCL (Hindustan Petroleum)</option>
+                <option>IOCL (Indian Oil)</option>
+                <option>Other / Mixed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <select>
+                <option>Bulk Order Inquiry</option>
+                <option>Complete Uniform Set</option>
+                <option>Product Customization</option>
+                <option>Accessories Only</option>
+                <option>General Query</option>
+                <option>Order Support</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea rows="4" placeholder="Tell us about your requirements — number of staff, uniform types needed, etc."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full btn-lg">Send Message <i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.contact-note { display:flex; gap:12px; background:#fff3cd; border-radius:10px; padding:14px 16px; margin-top:24px; font-size:13px; }
+.contact-note i { color:#856404; font-size:18px; margin-top:2px; flex-shrink:0; }
+.contact-note p { color:#856404; margin:0; line-height:1.6; }
+.contact-info a { color: var(--primary); }
+.contact-info a:hover { text-decoration: underline; }
+</style>
+
+<script>
+function handleContact(e) {
+  e.preventDefault();
+  alert('Thank you! We will contact you shortly.\n\nFor immediate response, WhatsApp us at +91 7877681385');
+}
+</script>
+
+<%- include('partials/footer') %>

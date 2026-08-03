@@ -1,0 +1,95 @@
+<%- include('../partials/header') %>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <i class="fas fa-hard-hat"></i> Admin
+    </div>
+    <nav class="admin-nav">
+      <a href="/admin" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="/admin/products"><i class="fas fa-box"></i> Products</a>
+      <a href="/admin/orders"><i class="fas fa-shopping-bag"></i> Orders</a>
+      <a href="/admin/users"><i class="fas fa-users"></i> Users</a>
+      <a href="/"><i class="fas fa-store"></i> View Store</a>
+      <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Dashboard</h1>
+      <span>Welcome, <%= user.name %></span>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+        <div class="stat-info">
+          <h3><%= stats.totalOrders %></h3>
+          <p>Total Orders</p>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+        <div class="stat-info">
+          <h3>₹<%= Number(stats.totalRevenue).toLocaleString('en-IN') %></h3>
+          <p>Total Revenue</p>
+        </div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon"><i class="fas fa-box"></i></div>
+        <div class="stat-info">
+          <h3><%= stats.totalProducts %></h3>
+          <p>Products</p>
+        </div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-info">
+          <h3><%= stats.totalUsers %></h3>
+          <p>Customers</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h3>Recent Orders</h3>
+        <a href="/admin/orders" class="btn btn-outline btn-sm">View All</a>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (recentOrders.length === 0) { %>
+              <tr><td colspan="6" class="text-center">No orders yet</td></tr>
+            <% } %>
+            <% recentOrders.forEach(order => { %>
+              <tr>
+                <td><strong>#<%= order.order_number %></strong></td>
+                <td><%= order.customer_name %></td>
+                <td>₹<%= order.total_amount.toLocaleString('en-IN') %></td>
+                <td><%= order.payment_method %></td>
+                <td><span class="order-status status-<%= order.status %>"><%= order.status %></span></td>
+                <td><%= new Date(order.created_at).toLocaleDateString('en-IN') %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

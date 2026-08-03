@@ -1,0 +1,3820 @@
+<%- include('partials/header') %>
+
+<%
+  /*
+   * Homepage image mapping
+   * All files must exist inside: public/img/
+   */
+  const homeImages = {
+    hero: '/img/Screenshot 2026-08-01 141829.png',
+
+    categories: [
+      '/img/Screenshot 2026-08-01 141917.png',
+      '/img/Screenshot 2026-08-01 141929.png',
+      '/img/Screenshot 2026-08-01 141938.png'
+    ],
+
+    featured: [
+      '/img/Screenshot 2026-08-01 141949.png',
+      '/img/Screenshot 2026-08-01 142011.png',
+      '/img/Screenshot 2026-08-01 142021.png',
+      '/img/Screenshot 2026-08-01 142148.png'
+    ],
+
+    bulk: '/img/Screenshot 2026-08-01 142204.png',
+
+    arrivals: [
+      '/img/Screenshot 2026-08-01 142217.png',
+      '/img/Screenshot 2026-08-01 142241.png',
+      '/img/Screenshot 2026-08-01 142253.png',
+      '/img/Screenshot 2026-08-01 142326.png'
+    ],
+
+    showcase: [
+      '/img/Screenshot 2026-08-01 142337.png',
+      '/img/Screenshot 2026-08-01 142345.png',
+      '/img/Screenshot 2026-08-01 142357.png',
+      '/img/Screenshot 2026-08-01 142405.png',
+      '/img/Screenshot 2026-08-01 142419.png',
+      '/img/Screenshot 2026-08-01 142441.png',
+      '/img/Screenshot 2026-08-01 142449.png',
+      '/img/Screenshot 2026-08-01 142502.png',
+      '/img/Screenshot 2026-08-01 142511.png'
+    ]
+  };
+
+  const dummyFeaturedProducts = [
+    {
+      id: 'demo-featured-1',
+      name: 'HPCL Premium Pump Attendant Uniform',
+      slug: 'hpcl-premium-pump-attendant-uniform',
+      category_name: 'Petroleum Uniforms',
+      price: 1299,
+      original_price: 1699,
+      is_featured: true,
+      is_dummy: true
+    },
+    {
+      id: 'demo-featured-2',
+      name: 'BPCL Professional Supervisor Uniform',
+      slug: 'bpcl-professional-supervisor-uniform',
+      category_name: 'Petroleum Uniforms',
+      price: 1499,
+      original_price: 1899,
+      is_featured: true,
+      is_dummy: true
+    },
+    {
+      id: 'demo-featured-3',
+      name: 'IOCL Embroidered Staff Cap',
+      slug: 'iocl-embroidered-staff-cap',
+      category_name: 'Caps & Headwear',
+      price: 349,
+      original_price: 499,
+      is_featured: true,
+      is_dummy: true
+    },
+    {
+      id: 'demo-featured-4',
+      name: 'Petroleum Staff Utility Backpack',
+      slug: 'petroleum-staff-utility-backpack',
+      category_name: 'Bags & Accessories',
+      price: 899,
+      original_price: 1199,
+      is_featured: true,
+      is_dummy: true
+    }
+  ];
+
+  const dummyNewArrivals = [
+    {
+      id: 'demo-new-1',
+      name: 'Reflective Safety Jacket',
+      slug: 'reflective-safety-jacket',
+      category_name: 'Petroleum Uniforms',
+      price: 799,
+      original_price: 999,
+      is_dummy: true
+    },
+    {
+      id: 'demo-new-2',
+      name: 'Premium Cotton Work Shirt',
+      slug: 'premium-cotton-work-shirt',
+      category_name: 'Petroleum Uniforms',
+      price: 699,
+      original_price: 899,
+      is_dummy: true
+    },
+    {
+      id: 'demo-new-3',
+      name: 'Logo Embroidered Sports Cap',
+      slug: 'logo-embroidered-sports-cap',
+      category_name: 'Caps & Headwear',
+      price: 299,
+      original_price: 399,
+      is_dummy: true
+    },
+    {
+      id: 'demo-new-4',
+      name: 'Compact Staff Sling Bag',
+      slug: 'compact-staff-sling-bag',
+      category_name: 'Bags & Accessories',
+      price: 549,
+      original_price: 749,
+      is_dummy: true
+    }
+  ];
+
+  const homeFeaturedProducts =
+    typeof featuredProducts !== 'undefined' &&
+    Array.isArray(featuredProducts) &&
+    featuredProducts.length > 0
+      ? featuredProducts.slice(0, 4)
+      : dummyFeaturedProducts;
+
+  const homeNewArrivals =
+    typeof newArrivals !== 'undefined' &&
+    Array.isArray(newArrivals) &&
+    newArrivals.length > 0
+      ? newArrivals.slice(0, 4)
+      : dummyNewArrivals;
+
+  const getProductLink = (product) =>
+    product && product.is_dummy
+      ? '/products'
+      : `/products/${product.slug}`;
+
+  const getProductImage = (product, fallbackImages, index) => {
+    const fallback = fallbackImages[index % fallbackImages.length];
+
+    const normalizeImagePath = (value) => {
+      if (!value || typeof value !== 'string') return null;
+
+      const cleanValue = value.trim();
+      const isRemoteImage = /^https?:\/\//i.test(cleanValue);
+      const isDataImage = /^data:image\//i.test(cleanValue);
+      const hasImageExtension = /\.(png|jpe?g|webp|gif|avif|svg)(\?.*)?$/i.test(cleanValue);
+
+      if (!isRemoteImage && !isDataImage && !hasImageExtension) {
+        return null;
+      }
+
+      if (isRemoteImage || isDataImage || cleanValue.startsWith('/')) {
+        return cleanValue;
+      }
+
+      return `/uploads/${cleanValue}`;
+    };
+
+    return (
+      normalizeImagePath(product && product.image) ||
+      normalizeImagePath(product && product.image_url) ||
+      fallback
+    );
+  };
+%>
+
+<style>
+  .home-real-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .hero-product-image {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .hero-product-image .home-real-image {
+    min-height: 300px;
+    object-position: center;
+  }
+
+  .cat-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cat-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .cat-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(4, 18, 15, 0.92) 0%,
+        rgba(4, 18, 15, 0.72) 48%,
+        rgba(4, 18, 15, 0.16) 100%
+      );
+  }
+
+  .cat-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+
+  .cat-card:hover .cat-image img {
+    transform: scale(1.06);
+  }
+
+  .cat-card-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .cat-card .cat-tag,
+  .cat-card h3,
+  .cat-card p,
+  .cat-card .cat-link {
+    color: #ffffff;
+  }
+
+  .cat-card .cat-tag {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(8px);
+  }
+
+  .cat-card .cat-link {
+    color: #c8e7dd;
+  }
+
+  .cat-card .cat-visual {
+    display: none;
+  }
+
+  .product-img-placeholder {
+    padding: 0;
+    overflow: hidden;
+    background: #e9efec;
+  }
+  .product-img-placeholder img {
+    font-size: 0;
+    color: transparent;
+  }
+
+
+  .product-img-placeholder .home-real-image {
+    height: 100%;
+    min-height: inherit;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  .product-card:hover .product-img-placeholder .home-real-image {
+    transform: scale(1.055);
+  }
+
+  .badge-demo {
+    position: absolute;
+    top: 44px;
+    left: 13px;
+    z-index: 4;
+    padding: 5px 9px;
+    border-radius: 7px;
+    background: rgba(5, 16, 14, 0.9);
+    color: #cfe9df;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+  }
+
+  .business-banner {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .business-banner-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .business-banner-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(4, 16, 14, 0.97) 0%,
+        rgba(4, 16, 14, 0.88) 47%,
+        rgba(4, 16, 14, 0.42) 100%
+      );
+  }
+
+  .business-banner-media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .business-banner-content,
+  .business-banner-visual {
+    position: relative;
+    z-index: 2;
+  }
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: 145px;
+    gap: 16px;
+  }
+
+  .showcase-card {
+    position: relative;
+    display: block;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 18px 45px rgba(7, 17, 15, 0.12);
+  }
+
+  .showcase-card:nth-child(1),
+  .showcase-card:nth-child(6) {
+    grid-column: span 5;
+    grid-row: span 2;
+  }
+
+  .showcase-card:nth-child(2),
+  .showcase-card:nth-child(3),
+  .showcase-card:nth-child(7),
+  .showcase-card:nth-child(8) {
+    grid-column: span 3;
+  }
+
+  .showcase-card:nth-child(4),
+  .showcase-card:nth-child(5),
+  .showcase-card:nth-child(9) {
+    grid-column: span 4;
+  }
+
+  .showcase-card img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+
+  .showcase-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        transparent 50%,
+        rgba(5, 16, 14, 0.78) 100%
+      );
+  }
+
+  .showcase-card span {
+    position: absolute;
+    z-index: 2;
+    left: 18px;
+    bottom: 16px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .showcase-card:hover img {
+    transform: scale(1.06);
+  }
+
+  .feature-card {
+    overflow: hidden;
+    padding: 0;
+    text-align: left;
+  }
+
+  .feature-media {
+    position: relative;
+    height: 165px;
+    overflow: hidden;
+  }
+
+  .feature-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 48%, rgba(5, 16, 14, 0.48) 100%);
+  }
+
+  .feature-media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .feature-card:hover .feature-media img {
+    transform: scale(1.055);
+  }
+
+  .feature-card-body {
+    padding: 24px 22px 26px;
+  }
+
+  .feature-card-body .feature-icon {
+    margin: -48px 0 18px;
+    position: relative;
+    z-index: 3;
+    border: 5px solid #ffffff;
+  }
+
+  .cta-section {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .cta-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: url('/img/Screenshot 2026-08-01 142511.png') center/cover no-repeat;
+  }
+
+  .cta-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(4, 17, 14, 0.96), rgba(4, 17, 14, 0.78));
+  }
+
+  @media (max-width: 900px) {
+    .showcase-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: 210px;
+    }
+
+    .showcase-card,
+    .showcase-card:nth-child(n) {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+
+    .showcase-card:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero-product-image .home-real-image {
+      min-height: 250px;
+    }
+
+    .showcase-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 240px;
+    }
+
+    .showcase-card,
+    .showcase-card:nth-child(n),
+    .showcase-card:first-child {
+      grid-column: span 1;
+    }
+  }
+</style>
+
+<main>
+
+  <!-- Hero Section -->
+
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0b1a2e;
+            --primary-light: #13263f;
+            --accent: #f47b20;
+            --accent-hover: #d96a1a;
+            --accent-light: #ff9a44;
+            --gold: #f5b342;
+            --text-white: #ffffff;
+            --text-off: #b0c4de;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.5);
+            --shadow-soft: 0 12px 24px rgba(0, 0, 0, 0.3);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition: 0.2s ease;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--primary);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ---------- CONTAINER ---------- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ---------- HERO SECTION ---------- */
+        .hero {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 40px 0 50px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(244, 123, 32, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(245, 179, 66, 0.05) 0%, transparent 50%),
+                var(--primary);
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* ---- decorative blobs ---- */
+        .hero-decoration {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-decoration-one {
+            width: 280px;
+            height: 280px;
+            background: rgba(244, 123, 32, 0.07);
+            top: -80px;
+            right: -60px;
+        }
+
+        .hero-decoration-two {
+            width: 220px;
+            height: 220px;
+            background: rgba(245, 179, 66, 0.04);
+            bottom: -80px;
+            left: -60px;
+        }
+
+        /* ---- hero container ---- */
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        /* ---------- LEFT CONTENT ---------- */
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 4.2vw, 3.4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-white);
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 6px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-white);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(244, 123, 32, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 8px 24px rgba(244, 123, 32, 0.40);
+        }
+
+        .btn-light-outline {
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-light-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.30);
+        }
+
+        .btn i {
+            font-size: 0.8rem;
+        }
+
+        /* ---------- RIGHT VISUAL – CARD BILKUL NECHE ---------- */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;    /* CARD KO NECHE DHKELA */
+            align-items: center;
+            min-height: 460px;
+            padding-bottom: 10px;
+        }
+
+        /* ---- product card – ab neeche shift ho gaya ---- */
+        .hero-product-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px 20px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow-heavy);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-top: 40px;           /* upar se push */
+            margin-bottom: 0;
+        }
+
+        /* product image – bada aur prominent */
+        .hero-product-image {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--primary-light);
+            position: relative;
+            aspect-ratio: 4 / 5;
+            max-height: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .hero-product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* info row */
+        .hero-product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2px;
+        }
+
+        .hero-product-info small {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-off);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .hero-product-info h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        .hero-product-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(244, 123, 32, 0.25);
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .hero-container {
+                gap: 30px;
+            }
+            .hero-product-card {
+                max-width: 360px;
+                padding: 20px 22px 18px;
+            }
+            .hero-product-image {
+                max-height: 280px;
+            }
+            .hero-visual {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .hero {
+                padding: 30px 0 40px;
+                min-height: auto;
+            }
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 20px;
+            }
+            .hero-content {
+                align-items: center;
+                gap: 16px;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .hero-visual {
+                min-height: auto;
+                justify-content: center;
+                padding: 10px 0 20px;
+            }
+            .hero-product-card {
+                max-width: 340px;
+                margin: 0 auto;
+                padding: 20px 20px 16px;
+            }
+            .hero-product-image {
+                max-height: 230px;
+                margin-bottom: 14px;
+            }
+            .hero-product-info {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .hero-product-badge {
+                margin-left: 0;
+            }
+            .hero-decoration-one {
+                width: 180px;
+                height: 180px;
+                top: -50px;
+                right: -30px;
+            }
+            .hero-decoration-two {
+                width: 140px;
+                height: 140px;
+                bottom: -50px;
+                left: -30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 20px 0 30px;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .hero-container {
+                gap: 16px;
+            }
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+            .btn {
+                padding: 10px 22px;
+                font-size: 0.85rem;
+            }
+            .hero-product-card {
+                max-width: 290px;
+                padding: 16px 16px 14px;
+            }
+            .hero-product-image {
+                max-height: 180px;
+                margin-bottom: 12px;
+            }
+            .hero-product-info h3 {
+                font-size: 0.95rem;
+            }
+            .hero-product-info small {
+                font-size: 0.55rem;
+            }
+            .hero-product-badge {
+                font-size: 0.5rem;
+                padding: 4px 12px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .hero-actions .btn {
+                width: 100%;
+                max-width: 220px;
+            }
+            .hero-visual {
+                min-height: auto;
+                padding: 0 0 10px;
+            }
+            .hero-decoration-one {
+                width: 120px;
+                height: 120px;
+                top: -30px;
+                right: -20px;
+            }
+            .hero-decoration-two {
+                width: 100px;
+                height: 100px;
+                bottom: -30px;
+                left: -20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- HERO – CARD BILKUL NECHE SHIFT                                -->
+    <!-- ============================================================ -->
+
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0b1a2e;
+            --primary-light: #13263f;
+            --accent: #f47b20;
+            --accent-hover: #d96a1a;
+            --accent-light: #ff9a44;
+            --gold: #f5b342;
+            --text-white: #ffffff;
+            --text-off: #b0c4de;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --shadow-heavy: 0 16px 32px rgba(0, 0, 0, 0.4);
+            --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.25);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --transition: 0.2s ease;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--primary);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ---------- CONTAINER ---------- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ---------- HERO SECTION – SAB UPAR ---------- */
+        .hero {
+            display: flex;
+            align-items: flex-start;      /* upar align */
+            position: relative;
+            padding: 8px 0 32px;          /* top padding bahut kam */
+            min-height: auto;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(244, 123, 32, 0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(245, 179, 66, 0.04) 0%, transparent 50%),
+                var(--primary);
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* ---- decorative blobs ---- */
+        .hero-decoration {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-decoration-one {
+            width: 200px;
+            height: 200px;
+            background: rgba(244, 123, 32, 0.06);
+            top: -60px;
+            right: -40px;
+        }
+
+        .hero-decoration-two {
+            width: 160px;
+            height: 160px;
+            background: rgba(245, 179, 66, 0.04);
+            bottom: -60px;
+            left: -40px;
+        }
+
+        /* ---- hero container ---- */
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        /* ---------- LEFT CONTENT – UPAR ---------- */
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            justify-content: flex-start;   /* upar */
+            padding-top: 0;                /* extra padding hataya */
+        }
+
+        .hero-content h1 {
+            font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-white);
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-white);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(244, 123, 32, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 6px 20px rgba(244, 123, 32, 0.40);
+        }
+
+        .btn-light-outline {
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-light-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.30);
+        }
+
+        .btn i {
+            font-size: 0.75rem;
+        }
+
+        /* ---------- RIGHT VISUAL – CARD UPAR ---------- */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;   /* upar */
+            align-items: center;
+            padding: 0 0 10px;             /* top padding 0 */
+        }
+
+        /* ---- product card ---- */
+        .hero-product-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px 14px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: var(--shadow-heavy);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        /* product image */
+        .hero-product-image {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--primary-light);
+            position: relative;
+            aspect-ratio: 4 / 5;
+            max-height: 210px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .hero-product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* info row */
+        .hero-product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0;
+        }
+
+        .hero-product-info small {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-off);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        .hero-product-info h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        .hero-product-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(244, 123, 32, 0.25);
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .hero-container {
+                gap: 24px;
+            }
+            .hero-product-card {
+                max-width: 320px;
+                padding: 14px 16px 12px;
+            }
+            .hero-product-image {
+                max-height: 180px;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .hero {
+                padding: 10px 0 28px;
+            }
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 16px;
+            }
+            .hero-content {
+                align-items: center;
+                gap: 10px;
+                padding-top: 0;
+            }
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .btn {
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+            .hero-visual {
+                justify-content: center;
+                padding: 0;
+            }
+            .hero-product-card {
+                max-width: 280px;
+                margin: 0 auto;
+                padding: 12px 14px 10px;
+            }
+            .hero-product-image {
+                max-height: 150px;
+                margin-bottom: 10px;
+            }
+            .hero-product-info {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 6px;
+            }
+            .hero-product-info h3 {
+                font-size: 0.85rem;
+            }
+            .hero-product-badge {
+                font-size: 0.45rem;
+                padding: 3px 10px;
+                margin-left: 0;
+            }
+            .hero-decoration-one {
+                width: 140px;
+                height: 140px;
+                top: -40px;
+                right: -30px;
+            }
+            .hero-decoration-two {
+                width: 110px;
+                height: 110px;
+                bottom: -40px;
+                left: -30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 6px 0 20px;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .hero-container {
+                gap: 12px;
+            }
+            .hero-content h1 {
+                font-size: 1.25rem;
+            }
+            .btn {
+                padding: 7px 16px;
+                font-size: 0.75rem;
+            }
+            .hero-product-card {
+                max-width: 240px;
+                padding: 10px 12px 8px;
+            }
+            .hero-product-image {
+                max-height: 120px;
+                margin-bottom: 8px;
+            }
+            .hero-product-info h3 {
+                font-size: 0.75rem;
+            }
+            .hero-product-info small {
+                font-size: 0.5rem;
+            }
+            .hero-product-badge {
+                font-size: 0.4rem;
+                padding: 2px 8px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .hero-actions .btn {
+                width: 100%;
+                max-width: 180px;
+            }
+            .hero-decoration-one {
+                width: 100px;
+                height: 100px;
+                top: -30px;
+                right: -20px;
+            }
+            .hero-decoration-two {
+                width: 80px;
+                height: 80px;
+                bottom: -30px;
+                left: -20px;
+            }
+        }
+    </style>
+
+
+    <!-- Font Awesome 6 (free) -->
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0b1a2e;
+            --primary-light: #13263f;
+            --accent: #f47b20;
+            --accent-hover: #d96a1a;
+            --accent-light: #ff9a44;
+            --gold: #f5b342;
+            --text-white: #ffffff;
+            --text-off: #b0c4de;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.5);
+            --shadow-soft: 0 12px 24px rgba(0, 0, 0, 0.3);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition: 0.2s ease;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--primary);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ---------- CONTAINER ---------- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ---------- HERO SECTION ---------- */
+        .hero {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 40px 0 50px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(244, 123, 32, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(245, 179, 66, 0.05) 0%, transparent 50%),
+                var(--primary);
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* ---- decorative blobs ---- */
+        .hero-decoration {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-decoration-one {
+            width: 280px;
+            height: 280px;
+            background: rgba(244, 123, 32, 0.07);
+            top: -80px;
+            right: -60px;
+        }
+
+        .hero-decoration-two {
+            width: 220px;
+            height: 220px;
+            background: rgba(245, 179, 66, 0.04);
+            bottom: -80px;
+            left: -60px;
+        }
+
+        /* ---- hero container ---- */
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        /* ---------- LEFT CONTENT – THODA UPAR ---------- */
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: flex-start;   /* center se flex-start – upar shift */
+            padding-top: 16px;             /* thoda sa gap upar se */
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 4.2vw, 3.4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-white);
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 6px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-white);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(244, 123, 32, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 8px 24px rgba(244, 123, 32, 0.40);
+        }
+
+        .btn-light-outline {
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-light-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.30);
+        }
+
+        .btn i {
+            font-size: 0.8rem;
+        }
+
+        /* ---------- RIGHT VISUAL – CARD THODA UPAR ---------- */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;   /* flex-end se flex-start – upar shift */
+            align-items: center;
+            min-height: auto;              /* 460px hata diya – extra space nahi */
+            padding-top: 16px;             /* thoda sa gap upar se */
+            padding-bottom: 10px;
+        }
+
+        /* ---- product card – margin-top hata diya ---- */
+        .hero-product-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px 20px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow-heavy);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0;                 /* 40px se 0 – upar shift */
+            margin-bottom: 0;
+        }
+
+        /* product image – bada aur prominent */
+        .hero-product-image {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--primary-light);
+            position: relative;
+            aspect-ratio: 4 / 5;
+            max-height: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .hero-product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* info row */
+        .hero-product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2px;
+        }
+
+        .hero-product-info small {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-off);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .hero-product-info h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        .hero-product-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(244, 123, 32, 0.25);
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .hero-container {
+                gap: 30px;
+            }
+            .hero-product-card {
+                max-width: 360px;
+                padding: 20px 22px 18px;
+            }
+            .hero-product-image {
+                max-height: 280px;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .hero {
+                padding: 30px 0 40px;
+                min-height: auto;
+            }
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 20px;
+            }
+            .hero-content {
+                align-items: center;
+                gap: 16px;
+                padding-top: 0;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .hero-visual {
+                min-height: auto;
+                justify-content: center;
+                padding: 10px 0 20px;
+            }
+            .hero-product-card {
+                max-width: 340px;
+                margin: 0 auto;
+                padding: 20px 20px 16px;
+            }
+            .hero-product-image {
+                max-height: 230px;
+                margin-bottom: 14px;
+            }
+            .hero-product-info {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .hero-product-badge {
+                margin-left: 0;
+            }
+            .hero-decoration-one {
+                width: 180px;
+                height: 180px;
+                top: -50px;
+                right: -30px;
+            }
+            .hero-decoration-two {
+                width: 140px;
+                height: 140px;
+                bottom: -50px;
+                left: -30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 20px 0 30px;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .hero-container {
+                gap: 16px;
+            }
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+            .btn {
+                padding: 10px 22px;
+                font-size: 0.85rem;
+            }
+            .hero-product-card {
+                max-width: 290px;
+                padding: 16px 16px 14px;
+            }
+            .hero-product-image {
+                max-height: 180px;
+                margin-bottom: 12px;
+            }
+            .hero-product-info h3 {
+                font-size: 0.95rem;
+            }
+            .hero-product-info small {
+                font-size: 0.55rem;
+            }
+            .hero-product-badge {
+                font-size: 0.5rem;
+                padding: 4px 12px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .hero-actions .btn {
+                width: 100%;
+                max-width: 220px;
+            }
+            .hero-visual {
+                min-height: auto;
+                padding: 0 0 10px;
+            }
+            .hero-decoration-one {
+                width: 120px;
+                height: 120px;
+                top: -30px;
+                right: -20px;
+            }
+            .hero-decoration-two {
+                width: 100px;
+                height: 100px;
+                bottom: -30px;
+                left: -20px;
+            }
+        }
+    </style>
+    <style>
+
+      /* =========================================================
+   COMPACT HERO INNER LAYOUT
+========================================================= */
+
+.dk-mini-hero-container {
+  width: min(1050px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 35px 0 25px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  align-items: center;
+  gap: 40px;
+}
+
+.dk-mini-hero-content {
+  max-width: 520px;
+}
+
+.dk-mini-hero-title {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(30px, 3.5vw, 46px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.8px;
+}
+
+.dk-mini-hero-title span {
+  display: block;
+  color: #a9d4c5;
+}
+
+.dk-mini-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.dk-mini-primary-btn,
+.dk-mini-secondary-btn {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+  transition: all 0.22s ease;
+}
+
+.dk-mini-primary-btn {
+  background: linear-gradient(135deg, #0f5c4d, #14705e);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(15, 92, 77, 0.25);
+}
+
+.dk-mini-primary-btn:hover {
+  background: linear-gradient(135deg, #14705e, #093e34);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.dk-mini-secondary-btn {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+}
+
+.dk-mini-secondary-btn:hover {
+  background: #ffffff;
+  color: #07110f;
+}
+
+.dk-mini-hero-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-mini-product-card {
+  width: 100%;
+  max-width: 330px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+}
+
+.dk-mini-product-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.dk-mini-product-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.dk-mini-product-info {
+  min-height: 0;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .dk-mini-hero-container {
+    width: min(100% - 28px, 1050px);
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 30px 0;
+  }
+
+  .dk-mini-hero-content {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .dk-mini-hero-actions {
+    justify-content: center;
+  }
+
+  .dk-mini-product-card {
+    max-width: 300px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .dk-mini-hero-container {
+    width: min(100% - 24px, 1050px);
+    gap: 24px;
+    padding: 24px 0;
+  }
+
+  .dk-mini-hero-title {
+    font-size: 30px;
+    letter-spacing: -1.2px;
+  }
+
+  .dk-mini-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .dk-mini-primary-btn,
+  .dk-mini-secondary-btn {
+    width: 100%;
+  }
+
+  .dk-mini-product-card {
+    max-width: 270px;
+  }
+}
+/* =========================================
+   HERO TOP-BOTTOM GAP FIX
+========================================= */
+
+.hero {
+  min-height: 0 !important;
+  height: auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dk-mini-hero-container {
+  width: min(1050px, calc(100% - 32px));
+  min-height: 500px;
+  margin: 0 auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  align-items: center;
+  gap: 40px;
+}
+
+.dk-mini-hero-content,
+.dk-mini-hero-visual {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dk-mini-hero-title {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dk-mini-hero-actions {
+  margin-top: 20px;
+  margin-bottom: 0 !important;
+}
+
+.dk-mini-product-card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .dk-mini-hero-container {
+    min-height: auto;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .dk-mini-hero-container {
+    min-height: auto;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+}
+    </style>
+
+    <style>
+      /* =========================================================
+   FULL RESPONSIVE COMPACT HERO
+========================================================= */
+
+.dk-responsive-hero {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(214, 173, 50, 0.08),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #0b111d 0%,
+      #101b2d 55%,
+      #122238 100%
+    );
+  overflow: hidden;
+}
+
+.dk-responsive-hero-container {
+  position: relative;
+  z-index: 2;
+  width: min(1050px, calc(100% - 32px));
+  min-height: 500px;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  align-items: center;
+  gap: 60px;
+}
+
+.dk-responsive-hero-content {
+  min-width: 0;
+  max-width: 620px;
+}
+
+.dk-responsive-hero-title {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(40px, 4.4vw, 62px);
+  font-weight: 800;
+  letter-spacing: -2.4px;
+  line-height: 1.05;
+}
+
+.dk-responsive-hero-title span {
+  display: block;
+  margin-top: 4px;
+  color: #ff6b45;
+}
+
+.dk-responsive-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.dk-responsive-primary-btn,
+.dk-responsive-secondary-btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 17px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease;
+}
+
+.dk-responsive-primary-btn {
+  border: 1px solid #0e1828;
+  background: #131d19;
+  color: #ffffff;
+  box-shadow: 0 12px 26px rgba(15, 122, 104, 0.28);
+}
+
+.dk-responsive-primary-btn:hover {
+  background:
+    linear-gradient(
+      135deg,
+      #14917a,
+      #0b5c4f
+    );
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.dk-responsive-secondary-btn {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+}
+
+.dk-responsive-secondary-btn:hover {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: #0f1c2d;
+  transform: translateY(-2px);
+}
+
+/* Right image area */
+
+.dk-responsive-hero-visual {
+  position: relative;
+  min-width: 0;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-responsive-image-ring {
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  border: 1px solid rgba(214, 173, 50, 0.35);
+  border-radius: 50%;
+}
+
+.dk-responsive-image-ring::before {
+  position: absolute;
+  inset: -50px;
+  border: 35px solid rgba(255, 255, 255, 0.02);
+  border-radius: 50%;
+  content: "";
+}
+
+.dk-responsive-product-card {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 330px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.dk-responsive-product-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.dk-responsive-product-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Decorations */
+
+.dk-responsive-hero-decoration {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.dk-responsive-decoration-one {
+  top: -180px;
+  right: -180px;
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dk-responsive-decoration-two {
+  right: 60px;
+  bottom: -330px;
+  width: 650px;
+  height: 650px;
+  border: 60px solid rgba(255, 255, 255, 0.025);
+}
+
+/* Large desktop */
+
+@media (min-width: 1400px) {
+  .dk-responsive-hero-container {
+    width: min(1120px, calc(100% - 40px));
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+
+  .dk-responsive-product-card {
+    max-width: 350px;
+  }
+}
+
+/* Laptop */
+
+@media (max-width: 1200px) {
+  .dk-responsive-hero {
+    min-height: 480px;
+  }
+
+  .dk-responsive-hero-container {
+    min-height: 480px;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 350px);
+    gap: 42px;
+  }
+
+  .dk-responsive-hero-title {
+    font-size: clamp(38px, 4.2vw, 54px);
+  }
+
+  .dk-responsive-hero-visual {
+    min-height: 390px;
+  }
+
+  .dk-responsive-product-card {
+    max-width: 310px;
+  }
+
+  .dk-responsive-image-ring {
+    width: 390px;
+    height: 390px;
+  }
+}
+
+/* Tablet landscape */
+
+@media (max-width: 992px) {
+  .dk-responsive-hero {
+    min-height: auto;
+    padding: 55px 0;
+  }
+
+  .dk-responsive-hero-container {
+    min-height: auto;
+    grid-template-columns: 1fr 300px;
+    gap: 30px;
+  }
+
+  .dk-responsive-hero-title {
+    font-size: clamp(36px, 5vw, 48px);
+  }
+
+  .dk-responsive-product-card {
+    max-width: 280px;
+  }
+
+  .dk-responsive-image-ring {
+    width: 340px;
+    height: 340px;
+  }
+}
+
+/* Tablet portrait */
+
+@media (max-width: 820px) {
+  .dk-responsive-hero {
+    padding: 60px 0 50px;
+  }
+
+  .dk-responsive-hero-container {
+    width: min(100% - 28px, 1050px);
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .dk-responsive-hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .dk-responsive-hero-title {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: clamp(36px, 7vw, 48px);
+  }
+
+  .dk-responsive-hero-actions {
+    justify-content: center;
+  }
+
+  .dk-responsive-hero-visual {
+    min-height: 390px;
+  }
+
+  .dk-responsive-product-card {
+    max-width: 300px;
+  }
+
+  .dk-responsive-image-ring {
+    width: 360px;
+    height: 360px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .dk-responsive-hero {
+    padding: 45px 0 40px;
+  }
+
+  .dk-responsive-hero-container {
+    width: min(100% - 24px, 1050px);
+    gap: 30px;
+  }
+
+  .dk-responsive-hero-title {
+    font-size: 33px;
+    letter-spacing: -1.4px;
+    line-height: 1.08;
+  }
+
+  .dk-responsive-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .dk-responsive-primary-btn,
+  .dk-responsive-secondary-btn {
+    width: 100%;
+  }
+
+  .dk-responsive-hero-visual {
+    min-height: 350px;
+  }
+
+  .dk-responsive-product-card {
+    max-width: 260px;
+    border-radius: 16px;
+  }
+
+  .dk-responsive-image-ring {
+    width: 300px;
+    height: 300px;
+  }
+
+  .dk-responsive-decoration-one {
+    top: -260px;
+    right: -280px;
+  }
+
+  .dk-responsive-decoration-two {
+    right: -250px;
+    bottom: -420px;
+  }
+}
+
+/* Small mobile */
+
+@media (max-width: 420px) {
+  .dk-responsive-hero {
+    padding: 40px 0 35px;
+  }
+
+  .dk-responsive-hero-title {
+    font-size: 29px;
+  }
+
+  .dk-responsive-hero-visual {
+    min-height: 320px;
+  }
+
+  .dk-responsive-product-card {
+    max-width: 230px;
+  }
+
+  .dk-responsive-image-ring {
+    width: 270px;
+    height: 270px;
+  }
+}
+    </style>
+
+    <!-- ============================================================ -->
+    <!-- HERO – TEXT AUR IMAGE THODA UPAR SHIFT                       -->
+    <!-- ============================================================ -->
+<section class="dk-responsive-hero">
+
+  <div class="dk-responsive-hero-decoration dk-responsive-decoration-one"></div>
+  <div class="dk-responsive-hero-decoration dk-responsive-decoration-two"></div>
+
+  <div class="dk-responsive-hero-container">
+
+    <!-- Left Content -->
+    <div class="dk-responsive-hero-content">
+
+      <h1 class="dk-responsive-hero-title">
+        Professional uniforms made for
+        <span>India’s petroleum workforce.</span>
+      </h1>
+
+      <div class="dk-responsive-hero-actions">
+
+        <a href="/products" class="dk-responsive-primary-btn">
+          Explore Collection
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <a
+          href="/products?category=petroleum-uniforms"
+          class="dk-responsive-secondary-btn"
+        >
+          Shop Uniforms
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- Right Visual -->
+    <div class="dk-responsive-hero-visual">
+
+      <div class="dk-responsive-image-ring"></div>
+
+      <div class="dk-responsive-product-card">
+
+        <div class="dk-responsive-product-image">
+          <img
+            src="https://i.pinimg.com/736x/94/e5/8b/94e58b78963c5195f8803aead7307a30.jpg"
+            alt="Breathable High-Viz Workwear by Uniformskart"
+            loading="eager"
+          >
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+
+  <!-- Trust Bar -->
+  <section class="trust-strip">
+    <div class="container trust-grid">
+
+      <div class="trust-item">
+        <span><i class="fa-solid fa-truck-fast"></i></span>
+        <div>
+          <strong>Fast Delivery</strong>
+          <small>Across India</small>
+        </div>
+      </div>
+
+      <div class="trust-item">
+        <span><i class="fa-solid fa-medal"></i></span>
+        <div>
+          <strong>Premium Quality</strong>
+          <small>Professional grade</small>
+        </div>
+      </div>
+
+      <div class="trust-item">
+        <span><i class="fa-solid fa-boxes-stacked"></i></span>
+        <div>
+          <strong>Bulk Pricing</strong>
+          <small>Special business rates</small>
+        </div>
+      </div>
+
+      <div class="trust-item">
+        <span><i class="fa-solid fa-headset"></i></span>
+        <div>
+          <strong>Customer Support</strong>
+          <small>Mon-Sat, 9AM-6PM</small>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Brands -->
+  <section class="brand-strip">
+    <div class="container brand-strip-inner">
+
+      <div class="brand-strip-heading">
+        <small>Uniform solutions for</small>
+        <strong>Leading petroleum companies</strong>
+      </div>
+
+      <div class="brand-logos">
+        <div class="brand-chip brand-chip-hpcl"><span>H</span> HPCL</div>
+        <div class="brand-chip brand-chip-bpcl"><span>B</span> BPCL</div>
+        <div class="brand-chip brand-chip-iocl"><span>I</span> IOCL</div>
+        <div class="brand-chip"><span>E</span> Essar Oil</div>
+        <div class="brand-chip"><span>R</span> Reliance BP</div>
+      </div>
+
+    </div>
+  </section>
+
+
+    <!-- Featured Products -->
+  <section class="section products-section">
+    <div class="container">
+
+      <div class="section-heading-row">
+        <div class="section-header section-header-left">
+          <span class="section-kicker">Customer Favourites</span>
+          <h2>Featured products</h2>
+          <p>
+            Our most popular uniforms and accessories selected for
+            petroleum professionals.
+          </p>
+        </div>
+
+        <a href="/products" class="btn btn-outline-sm">
+          View All Products
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="products-grid">
+
+        <% homeFeaturedProducts.forEach((product, index) => { %>
+
+          <article class="product-card">
+
+            <a
+              href="<%= getProductLink(product) %>"
+              class="product-img-wrap"
+            >
+              <div class="product-img-placeholder">
+                <img
+                  src="<%= getProductImage(product, homeImages.featured, index) %>"
+                  alt="<%= product.name %>"
+                  class="home-real-image"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='<%= homeImages.featured[index % homeImages.featured.length] %>';"
+                >
+              </div>
+
+              <% if (product.original_price && product.original_price > product.price) { %>
+                <span class="badge-sale">
+                  <%= Math.round((1 - product.price / product.original_price) * 100) %>% OFF
+                </span>
+              <% } %>
+
+              <% if (product.is_featured) { %>
+                <span class="badge-featured">Featured</span>
+              <% } %>
+
+              <% if (product.is_dummy) { %>
+                <span class="badge-demo">Demo</span>
+              <% } %>
+
+              <span class="product-quick-view">View Product</span>
+            </a>
+
+            <div class="product-info">
+
+              <span class="product-cat">
+                <%= product.category_name %>
+              </span>
+
+              <h3>
+                <a href="<%= getProductLink(product) %>">
+                  <%= product.name %>
+                </a>
+              </h3>
+
+              <div class="product-rating">
+                <span>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </span>
+                <small>Premium quality</small>
+              </div>
+
+              <div class="product-price">
+                <span class="price">
+                  ₹<%= Number(product.price).toLocaleString('en-IN') %>
+                </span>
+
+                <% if (product.original_price && product.original_price > product.price) { %>
+                  <span class="price-old">
+                    ₹<%= Number(product.original_price).toLocaleString('en-IN') %>
+                  </span>
+                <% } %>
+              </div>
+
+              <div class="product-actions">
+
+                <a
+                  href="<%= getProductLink(product) %>"
+                  class="btn btn-primary btn-sm product-details-btn"
+                >
+                  View Details
+                </a>
+
+                <% if (product.is_dummy) { %>
+
+                  <a
+                    href="/products"
+                    class="btn btn-icon"
+                    title="Browse available products"
+                    aria-label="Browse available products"
+                  >
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+
+                <% } else if (user) { %>
+
+                  <form action="/cart/add" method="POST">
+                    <input
+                      type="hidden"
+                      name="product_id"
+                      value="<%= product.id %>"
+                    >
+                    <input
+                      type="hidden"
+                      name="quantity"
+                      value="1"
+                    >
+                    <button
+                      type="submit"
+                      class="btn btn-icon"
+                      title="Add to Cart"
+                      aria-label="Add product to cart"
+                    >
+                      <i class="fa-solid fa-bag-shopping"></i>
+                    </button>
+                  </form>
+
+                <% } else { %>
+
+                  <a
+                    href="/auth/login"
+                    class="btn btn-icon"
+                    title="Login to add product"
+                    aria-label="Login to add product to cart"
+                  >
+                    <i class="fa-solid fa-bag-shopping"></i>
+                  </a>
+
+                <% } %>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        <% }) %>
+
+      </div>
+
+    </div>
+  </section>
+
+  
+  <!-- Categories -->
+  <section class="section categories-section">
+    <div class="container">
+
+      <div class="section-heading-row">
+        <div class="section-header section-header-left">
+          <span class="section-kicker">Shop Collections</span>
+          <h2>Explore by category</h2>
+          <p>
+            Find professional products designed for petroleum employees
+            and organisations.
+          </p>
+        </div>
+
+        <a href="/products" class="section-view-link">
+          View all products
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="categories-grid">
+
+        <a
+          href="/products?category=petroleum-uniforms"
+          class="cat-card cat-uniform"
+        >
+          <div class="cat-image">
+            <img
+              src="<%= homeImages.categories[0] %>"
+              alt="Petroleum uniforms"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="cat-card-content">
+            <span class="cat-tag">Best Selling</span>
+            <h3>Petroleum Uniforms</h3>
+            <p>
+              Complete professional uniform sets for pump attendants,
+              supervisors and staff.
+            </p>
+            <span class="cat-link">
+              Explore Uniforms
+              <i class="fa-solid fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a
+          href="/products?category=caps-headwear"
+          class="cat-card cat-caps"
+        >
+          <div class="cat-image">
+            <img
+              src="<%= homeImages.categories[1] %>"
+              alt="Caps and headwear"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="cat-card-content">
+            <span class="cat-tag">Custom Branding</span>
+            <h3>Caps & Headwear</h3>
+            <p>
+              Comfortable branded caps with professional embroidery
+              and durable fabric.
+            </p>
+            <span class="cat-link">
+              Explore Caps
+              <i class="fa-solid fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a
+          href="/products?category=bags-accessories"
+          class="cat-card cat-bags"
+        >
+          <div class="cat-image">
+            <img
+              src="<%= homeImages.categories[2] %>"
+              alt="Bags and accessories"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="cat-card-content">
+            <span class="cat-tag">Everyday Essentials</span>
+            <h3>Bags & Accessories</h3>
+            <p>
+              Branded backpacks, carry bags and everyday accessories
+              for your workforce.
+            </p>
+            <span class="cat-link">
+              Explore Accessories
+              <i class="fa-solid fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Bulk Order Banner -->
+  <section class="business-banner-section">
+    <div class="container">
+
+      <div class="business-banner">
+
+        <div class="business-banner-media">
+          <img
+            src="<%= homeImages.bulk %>"
+            alt="DressKart bulk uniform orders"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="business-banner-pattern"></div>
+
+        <div class="business-banner-content">
+          <span class="business-label">Business & Bulk Orders</span>
+
+          <h2>Ordering uniforms for your entire team?</h2>
+
+          <p>
+            Get customised products, logo branding, flexible quantities
+            and special pricing for petroleum pumps and organisations.
+          </p>
+
+          <div class="business-actions">
+            <a href="/contact" class="btn btn-white btn-lg">
+              Get Bulk Quotation
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+            <a href="tel:+917877681385" class="business-phone">
+              <span><i class="fa-solid fa-phone"></i></span>
+              <div>
+                <small>Call our sales team</small>
+                <strong>+91 7877681385</strong>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="business-banner-visual">
+          <div class="business-icon-card">
+            <i class="fa-solid fa-boxes-stacked"></i>
+          </div>
+
+          <div class="business-mini-card">
+            <i class="fa-solid fa-check"></i>
+            Custom Logo Printing
+          </div>
+
+          <div class="business-mini-card">
+            <i class="fa-solid fa-check"></i>
+            Special Bulk Pricing
+          </div>
+
+          <div class="business-mini-card">
+            <i class="fa-solid fa-check"></i>
+            Dedicated Assistance
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="section features-section">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-kicker">The DressKart Difference</span>
+        <h2>Why customers choose DressKart</h2>
+        <p>
+          Dependable service and professional quality for every order.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="<%= homeImages.showcase[0] %>" alt="Professional quality uniforms" loading="lazy">
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <h3>Professional Quality</h3>
+            <p>
+              Durable fabrics and quality finishing created for regular
+              professional use.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="<%= homeImages.showcase[1] %>" alt="Pan India delivery support" loading="lazy">
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h3>Pan India Delivery</h3>
+            <p>
+              Safe and reliable shipping for customers and organisations
+              throughout India.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="<%= homeImages.showcase[2] %>" alt="DressKart customer assistance" loading="lazy">
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+            <h3>Easy Assistance</h3>
+            <p>
+              Friendly customer support for product selection, orders
+              and after-sales queries.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="<%= homeImages.showcase[3] %>" alt="Bulk uniform solutions" loading="lazy">
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <h3>Bulk Order Solutions</h3>
+            <p>
+              Special pricing and customisation options for companies
+              and petroleum outlets.
+            </p>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- New Arrivals -->
+  <section class="section new-arrivals-section">
+    <div class="container">
+
+      <div class="section-heading-row">
+        <div class="section-header section-header-left">
+          <span class="section-kicker">Just Added</span>
+          <h2>New arrivals</h2>
+          <p>
+            Explore the latest products added to the DressKart collection.
+          </p>
+        </div>
+
+        <a href="/products?sort=newest" class="section-view-link">
+          See all new products
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="products-grid">
+
+        <% homeNewArrivals.forEach((product, index) => { %>
+
+          <article class="product-card">
+
+            <a
+              href="<%= getProductLink(product) %>"
+              class="product-img-wrap"
+            >
+              <div class="product-img-placeholder">
+                <img
+                  src="<%= homeImages.arrivals[index % homeImages.arrivals.length] %>"
+                  alt="<%= product.name %>"
+                  class="home-real-image"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='/img/Screenshot 2026-08-01 142217.png';"
+                >
+              </div>
+
+              <span class="badge-new">New</span>
+
+              <% if (product.is_dummy) { %>
+                <span class="badge-demo">Demo</span>
+              <% } %>
+
+              <span class="product-quick-view">View Product</span>
+            </a>
+
+            <div class="product-info">
+              <span class="product-cat">
+                <%= product.category_name %>
+              </span>
+
+              <h3>
+                <a href="<%= getProductLink(product) %>">
+                  <%= product.name %>
+                </a>
+              </h3>
+
+              <div class="product-price">
+                <span class="price">
+                  ₹<%= Number(product.price).toLocaleString('en-IN') %>
+                </span>
+
+                <% if (product.original_price && product.original_price > product.price) { %>
+                  <span class="price-old">
+                    ₹<%= Number(product.original_price).toLocaleString('en-IN') %>
+                  </span>
+                <% } %>
+              </div>
+
+              <a
+                href="<%= getProductLink(product) %>"
+                class="btn btn-primary btn-sm btn-full"
+              >
+                View Details
+              </a>
+            </div>
+
+          </article>
+
+        <% }) %>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Complete Product Showcase -->
+<!-- Premium Collection Collage -->
+<section class="dk-collection-section">
+
+  <div class="dk-collection-decoration dk-collection-decoration-one"></div>
+  <div class="dk-collection-decoration dk-collection-decoration-two"></div>
+
+  <div class="container">
+
+    <!-- Section heading -->
+    <div class="dk-collection-heading-row">
+
+      <div class="dk-collection-heading">
+
+        <span class="dk-collection-kicker">
+          <i class="fa-solid fa-images"></i>
+          DressKart Gallery
+        </span>
+
+        <h2>
+          Explore our complete
+          <span>professional collection</span>
+        </h2>
+
+        <p>
+          Discover premium petroleum uniforms, professional workwear,
+          caps, bags and accessories designed for modern teams.
+        </p>
+
+      </div>
+
+      <a href="/products" class="dk-collection-main-link">
+        Shop Collection
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
+    </div>
+
+    <!-- Premium collage -->
+    <div class="dk-collection-collage">
+
+      <% homeImages.showcase.forEach((image, index) => { %>
+
+        <a
+          href="/products"
+          class="
+            dk-collection-card
+            dk-collection-card-<%= index + 1 %>
+          "
+          aria-label="View <%= [
+            'Professional Uniforms',
+            'Premium Workwear',
+            'Petroleum Staff Collection',
+            'Branded Caps',
+            'Utility Bags',
+            'Safety Workwear',
+            'Team Uniform Sets',
+            'Staff Accessories',
+            'Complete DressKart Range'
+          ][index] %>"
+        >
+
+          <img
+            src="<%= image %>"
+            alt="<%= [
+              'Professional petroleum uniforms',
+              'Premium staff workwear',
+              'Petroleum staff uniform collection',
+              'Professional branded caps',
+              'Utility bags and accessories',
+              'Industrial safety workwear',
+              'Professional team uniform sets',
+              'Petroleum staff accessories',
+              'Complete DressKart product range'
+            ][index] %>"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='/img/Screenshot 2026-08-01 142337.png';"
+          >
+
+          <div class="dk-collection-card-shade"></div>
+
+          <div class="dk-collection-card-header">
+
+            <span class="dk-collection-number">
+              <%= String(index + 1).padStart(2, '0') %>
+            </span>
+
+            <span class="dk-collection-arrow">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </span>
+
+          </div>
+
+          <div class="dk-collection-card-content">
+
+            <span class="dk-collection-card-kicker">
+              DressKart Professional
+            </span>
+
+            <h3>
+              <%= [
+                'Professional Uniforms',
+                'Premium Workwear',
+                'Petroleum Staff Collection',
+                'Branded Caps',
+                'Utility Bags',
+                'Safety Workwear',
+                'Team Uniform Sets',
+                'Staff Accessories',
+                'Complete DressKart Range'
+              ][index] %>
+            </h3>
+
+            <span class="dk-collection-card-link">
+              Explore Products
+              <i class="fa-solid fa-arrow-right"></i>
+            </span>
+
+          </div>
+
+        </a>
+
+      <% }) %>
+
+    </div>
+
+    <!-- Bottom collection strip -->
+    <div class="dk-collection-bottom">
+
+      <div class="dk-collection-bottom-copy">
+
+        <span class="dk-collection-bottom-icon">
+          <i class="fa-solid fa-boxes-stacked"></i>
+        </span>
+
+        <div>
+          <strong>Need uniforms for your complete team?</strong>
+
+          <p>
+            Get custom branding, flexible quantities and special bulk pricing.
+          </p>
+        </div>
+
+      </div>
+
+      <a href="/contact" class="dk-collection-enquiry-btn">
+        Get Bulk Quotation
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  /* =========================================================
+   DRESSKART COLLECTION COLLAGE
+   DARK GREEN + MUTED GOLD THEME
+========================================================= */
+
+.dk-collection-section {
+  position: relative;
+  padding: 82px 0;
+  background:
+    radial-gradient(
+      circle at 85% 18%,
+      rgba(198, 156, 35, 0.09),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 10% 88%,
+      rgba(20, 92, 73, 0.13),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #07110f 0%,
+      #0b1814 52%,
+      #10261f 100%
+    );
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.dk-collection-section::before {
+  content: "";
+  position: absolute;
+  top: -260px;
+  right: -180px;
+  width: 620px;
+  height: 620px;
+  border: 1px solid rgba(202, 164, 52, 0.12);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 70px rgba(202, 164, 52, 0.018),
+    0 0 0 140px rgba(202, 164, 52, 0.012);
+  pointer-events: none;
+}
+
+.dk-collection-section::after {
+  content: "";
+  position: absolute;
+  bottom: -300px;
+  left: -220px;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: rgba(15, 92, 77, 0.1);
+  pointer-events: none;
+}
+
+.dk-collection-decoration {
+  display: none;
+}
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.dk-collection-heading-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 38px;
+}
+
+.dk-collection-heading {
+  max-width: 720px;
+}
+
+.dk-collection-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 13px;
+  padding: 7px 12px;
+  border: 1px solid rgba(214, 174, 48, 0.35);
+  border-radius: 999px;
+  background: rgba(214, 174, 48, 0.07);
+  color: #e4bd42;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.dk-collection-kicker i {
+  color: #e4bd42;
+}
+
+.dk-collection-heading h2 {
+  margin: 0 0 13px;
+  color: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(34px, 4vw, 50px);
+  font-weight: 800;
+  letter-spacing: -1.7px;
+  line-height: 1.08;
+}
+
+.dk-collection-heading h2 span {
+  display: block;
+  color: #d6ad32;
+}
+
+.dk-collection-heading p {
+  max-width: 650px;
+  margin: 0;
+  color: #b7c4bf;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.dk-collection-main-link {
+  min-height: 43px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 17px;
+  border: 1px solid rgba(214, 173, 50, 0.36);
+  border-radius: 10px;
+  background: rgba(214, 173, 50, 0.07);
+  color: #e4bd42;
+  font-size: 10px;
+  font-weight: 800;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.dk-collection-main-link:hover {
+  background: #d6ad32;
+  color: #07110f;
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   COLLAGE GRID
+========================================================= */
+
+.dk-collection-collage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: 135px;
+  gap: 14px;
+}
+
+.dk-collection-card-1 {
+  grid-column: 1 / span 5;
+  grid-row: 1 / span 3;
+}
+
+.dk-collection-card-2 {
+  grid-column: 6 / span 3;
+  grid-row: 1 / span 2;
+}
+
+.dk-collection-card-3 {
+  grid-column: 9 / span 4;
+  grid-row: 1 / span 2;
+}
+
+.dk-collection-card-4 {
+  grid-column: 6 / span 4;
+  grid-row: 3 / span 2;
+}
+
+.dk-collection-card-5 {
+  grid-column: 10 / span 3;
+  grid-row: 3 / span 2;
+}
+
+.dk-collection-card-6 {
+  grid-column: 1 / span 5;
+  grid-row: 4 / span 1;
+}
+
+.dk-collection-card-7 {
+  grid-column: 1 / span 4;
+  grid-row: 5 / span 2;
+}
+
+.dk-collection-card-8 {
+  grid-column: 5 / span 4;
+  grid-row: 5 / span 2;
+}
+
+.dk-collection-card-9 {
+  grid-column: 9 / span 4;
+  grid-row: 5 / span 2;
+}
+
+/* =========================================================
+   COLLAGE CARDS
+========================================================= */
+
+.dk-collection-card {
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(214, 173, 50, 0.16);
+  border-radius: 17px;
+  background: #0a1411;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 0.34s ease,
+    border-color 0.34s ease,
+    box-shadow 0.34s ease;
+}
+
+.dk-collection-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  filter:
+    saturate(0.88)
+    brightness(0.82)
+    contrast(1.05);
+  transition:
+    transform 0.5s ease,
+    filter 0.5s ease;
+}
+
+.dk-collection-card-1 img,
+.dk-collection-card-2 img,
+.dk-collection-card-4 img {
+  object-position: center top;
+}
+
+.dk-collection-card-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 15, 12, 0.06) 20%,
+      rgba(5, 15, 12, 0.3) 53%,
+      rgba(5, 15, 12, 0.96) 100%
+    );
+}
+
+.dk-collection-card::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: -85px;
+  bottom: -95px;
+  width: 195px;
+  height: 195px;
+  border: 20px solid rgba(214, 173, 50, 0.13);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.4s ease;
+}
+
+.dk-collection-card::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background:
+    linear-gradient(
+      90deg,
+      #d6ad32,
+      #0f5c4d,
+      transparent
+    );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.34s ease;
+}
+
+/* =========================================================
+   CARD TOP
+========================================================= */
+
+.dk-collection-card-header {
+  position: absolute;
+  z-index: 4;
+  top: 13px;
+  right: 13px;
+  left: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dk-collection-number {
+  min-width: 32px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 1px solid rgba(214, 173, 50, 0.27);
+  border-radius: 999px;
+  background: rgba(7, 17, 15, 0.75);
+  color: #e8c75c;
+  font-size: 8px;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
+}
+
+.dk-collection-arrow {
+  width: 31px;
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(214, 173, 50, 0.24);
+  border-radius: 50%;
+  background: rgba(7, 17, 15, 0.78);
+  color: #e5bd40;
+  font-size: 9px;
+  opacity: 0;
+  transform: translateY(-6px);
+  backdrop-filter: blur(10px);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    background 0.28s ease,
+    color 0.28s ease;
+}
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.dk-collection-card-content {
+  position: absolute;
+  z-index: 4;
+  right: 17px;
+  bottom: 15px;
+  left: 17px;
+}
+
+.dk-collection-card-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: #d6ad32;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dk-collection-card-content h3 {
+  max-width: 92%;
+  margin: 0;
+  color: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(13px, 1.3vw, 18px);
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.22;
+}
+
+.dk-collection-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  color: #e4bd42;
+  font-size: 8px;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+
+.dk-collection-card-6 .dk-collection-card-kicker {
+  display: none;
+}
+
+.dk-collection-card-6 .dk-collection-card-content {
+  bottom: 11px;
+}
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.dk-collection-card:hover {
+  border-color: rgba(214, 173, 50, 0.48);
+  box-shadow: 0 26px 55px rgba(0, 0, 0, 0.42);
+  transform: translateY(-4px);
+}
+
+.dk-collection-card:hover img {
+  filter:
+    saturate(1)
+    brightness(0.92)
+    contrast(1.06);
+  transform: scale(1.06);
+}
+
+.dk-collection-card:hover::before {
+  transform: scale(1.12);
+}
+
+.dk-collection-card:hover::after {
+  transform: scaleX(1);
+}
+
+.dk-collection-card:hover .dk-collection-arrow,
+.dk-collection-card:hover .dk-collection-card-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dk-collection-card:hover .dk-collection-arrow {
+  background: #d6ad32;
+  color: #07110f;
+}
+
+/* =========================================================
+   BOTTOM BULK STRIP
+========================================================= */
+
+.dk-collection-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 18px;
+  padding: 20px 22px;
+  border: 1px solid rgba(214, 173, 50, 0.18);
+  border-radius: 15px;
+  background:
+    radial-gradient(
+      circle at 88% 20%,
+      rgba(214, 173, 50, 0.09),
+      transparent 26%
+    ),
+    linear-gradient(
+      110deg,
+      #07110f 0%,
+      #0a1814 62%,
+      #10261f 100%
+    );
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+}
+
+.dk-collection-bottom-copy {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.dk-collection-bottom-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #d6ad32;
+  color: #07110f;
+  font-size: 14px;
+}
+
+.dk-collection-bottom-copy strong {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.dk-collection-bottom-copy p {
+  margin: 4px 0 0;
+  color: #9fafa9;
+  font-size: 9px;
+}
+
+.dk-collection-enquiry-btn {
+  min-height: 41px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid rgba(214, 173, 50, 0.36);
+  border-radius: 10px;
+  background: rgba(214, 173, 50, 0.08);
+  color: #e4bd42;
+  font-size: 9px;
+  font-weight: 800;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.dk-collection-enquiry-btn:hover {
+  background: #d6ad32;
+  color: #07110f;
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+  .dk-collection-section {
+    padding: 70px 0;
+  }
+
+  .dk-collection-heading-row {
+    align-items: flex-start;
+  }
+
+  .dk-collection-collage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 230px;
+  }
+
+  .dk-collection-card,
+  .dk-collection-card-1,
+  .dk-collection-card-2,
+  .dk-collection-card-3,
+  .dk-collection-card-4,
+  .dk-collection-card-5,
+  .dk-collection-card-6,
+  .dk-collection-card-7,
+  .dk-collection-card-8,
+  .dk-collection-card-9 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .dk-collection-card-1,
+  .dk-collection-card-6 {
+    grid-column: 1 / -1;
+    min-height: 285px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+  .dk-collection-section {
+    padding: 58px 0;
+  }
+
+  .dk-collection-heading-row {
+    display: block;
+    margin-bottom: 28px;
+  }
+
+  .dk-collection-heading h2 {
+    font-size: 31px;
+  }
+
+  .dk-collection-heading p {
+    font-size: 11px;
+  }
+
+  .dk-collection-main-link {
+    margin-top: 18px;
+  }
+
+  .dk-collection-collage {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 245px;
+    gap: 12px;
+  }
+
+  .dk-collection-card,
+  .dk-collection-card-1,
+  .dk-collection-card-2,
+  .dk-collection-card-3,
+  .dk-collection-card-4,
+  .dk-collection-card-5,
+  .dk-collection-card-6,
+  .dk-collection-card-7,
+  .dk-collection-card-8,
+  .dk-collection-card-9 {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 245px;
+  }
+
+  .dk-collection-arrow,
+  .dk-collection-card-link {
+    opacity: 1;
+    transform: none;
+  }
+
+  .dk-collection-bottom {
+    display: block;
+    padding: 18px;
+  }
+
+  .dk-collection-enquiry-btn {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 390px) {
+  .dk-collection-heading h2 {
+    font-size: 28px;
+  }
+
+  .dk-collection-collage {
+    grid-auto-rows: 220px;
+  }
+
+  .dk-collection-card,
+  .dk-collection-card-1,
+  .dk-collection-card-2,
+  .dk-collection-card-3,
+  .dk-collection-card-4,
+  .dk-collection-card-5,
+  .dk-collection-card-6,
+  .dk-collection-card-7,
+  .dk-collection-card-8,
+  .dk-collection-card-9 {
+    min-height: 220px;
+  }
+}
+</style>
+
+  <!-- Final CTA -->
+  <section class="cta-section">
+    <div class="container">
+
+      <div class="cta-content">
+        <span class="cta-icon">
+          <i class="fa-solid fa-headset"></i>
+        </span>
+
+        <div>
+          <h2>Need help choosing the right products?</h2>
+          <p>
+            Speak with our team for bulk orders, product information
+            and custom branding assistance.
+          </p>
+        </div>
+
+        <div class="cta-btns">
+          <a href="/contact" class="btn btn-white">
+            Contact Our Team
+          </a>
+
+          <a
+            href="https://wa.me/917877681385"
+            class="btn btn-whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i class="fa-brands fa-whatsapp"></i>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<%- include('partials/footer') %>
