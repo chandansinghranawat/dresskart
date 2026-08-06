@@ -10,18 +10,23 @@
 
   <meta
     name="description"
-    content="DressKart India - Premium petroleum uniforms, caps, bags and accessories."
+    content="DressKart India - Professional petroleum uniforms, caps, bags and workforce accessories."
   >
 
-  <title><%= title || 'DressKart India' %></title>
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  <meta
+    name="theme-color"
+    content="#10233f"
   >
 
+  <title>
+    <%= typeof title !== 'undefined' && title
+      ? `${title} | DressKart India`
+      : 'DressKart India | Petroleum Uniforms & Accessories'
+    %>
+  </title>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
   <link
     rel="preconnect"
     href="https://fonts.gstatic.com"
@@ -29,238 +34,1334 @@
   >
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="/css/style.css">
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
+
+  <!-- Main stylesheet -->
+  <link
+    rel="stylesheet"
+    href="/css/style.css"
+  >
+
+  <!-- Premium Header Styles -->
+  <style>
+    /* =========================================================
+       DRESSKART PREMIUM LIGHT HEADER
+    ========================================================= */
+
+    :root {
+      --header-navy: #10233f;
+      --header-navy-hover: #172f50;
+      --header-gold: #d7aa28;
+      --header-gold-hover: #c49617;
+      --header-orange: #f26a2e;
+      --header-text: #172033;
+      --header-muted: #6f7887;
+      --header-soft: #f6f7f8;
+      --header-border: #e7e9ed;
+      --header-white: #ffffff;
+      --header-shadow:
+        0 12px 40px rgba(16, 35, 63, 0.08);
+      --header-container: 1240px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: #ffffff;
+      color: var(--header-text);
+      font-family: "Poppins", sans-serif;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .dk-header-container {
+      width: min(
+        var(--header-container),
+        calc(100% - 40px)
+      );
+      margin: 0 auto;
+    }
+
+    /* =========================================================
+       TOP ANNOUNCEMENT BAR
+    ========================================================= */
+
+    .dk-topbar {
+      position: relative;
+      z-index: 1101;
+      background: var(--header-navy);
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .dk-topbar-inner {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      font-size: 11px;
+    }
+
+    .dk-topbar-contact,
+    .dk-topbar-offer {
+      display: flex;
+      align-items: center;
+    }
+
+    .dk-topbar-contact {
+      gap: 25px;
+    }
+
+    .dk-topbar-contact a,
+    .dk-topbar-offer {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.22s ease;
+    }
+
+    .dk-topbar-contact a:hover {
+      color: #ffffff;
+    }
+
+    .dk-topbar i {
+      color: #efc756;
+      font-size: 11px;
+    }
+
+    .dk-topbar-offer {
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       MAIN SITE HEADER
+    ========================================================= */
+
+    .dk-site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1100;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      border-bottom: 1px solid var(--header-border);
+      box-shadow: 0 5px 24px rgba(16, 35, 63, 0.05);
+      backdrop-filter: blur(16px);
+      transition:
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+    }
+
+    .dk-site-header.navbar-scrolled {
+      background: rgba(255, 255, 255, 0.99);
+      box-shadow: var(--header-shadow);
+    }
+
+    .dk-header-main {
+      min-height: 88px;
+      display: grid;
+      grid-template-columns:
+        minmax(205px, auto)
+        minmax(320px, 1fr)
+        auto;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* =========================================================
+       BRAND
+    ========================================================= */
+
+    .dk-brand {
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dk-brand-mark {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background:
+        linear-gradient(
+          145deg,
+          #10233f,
+          #1c3c63
+        );
+      box-shadow:
+        0 12px 28px rgba(16, 35, 63, 0.2);
+      color: #efc756;
+      font-size: 20px;
+      transform: rotate(-2deg);
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .dk-brand:hover .dk-brand-mark {
+      transform: rotate(0deg) translateY(-2px);
+      box-shadow:
+        0 16px 32px rgba(16, 35, 63, 0.25);
+    }
+
+    .dk-brand-copy {
+      min-width: 0;
+      display: block;
+      white-space: nowrap;
+    }
+
+    .dk-brand-name {
+      display: block;
+      color: var(--header-navy);
+      font-family: "Bodoni Moda", "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .dk-brand-name span {
+      color: var(--header-orange);
+    }
+
+    .dk-brand-tagline {
+      display: block;
+      margin-top: 6px;
+      color: var(--header-muted);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    .dk-header-search {
+      min-width: 0;
+    }
+
+    .dk-search-form {
+      width: 100%;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      padding-left: 18px;
+      border: 1px solid #dde1e7;
+      border-radius: 14px;
+      background: #f8f9fa;
+      overflow: hidden;
+      transition:
+        border-color 0.22s ease,
+        box-shadow 0.22s ease,
+        background 0.22s ease;
+    }
+
+    .dk-search-form:focus-within {
+      border-color: rgba(215, 170, 40, 0.75);
+      background: #ffffff;
+      box-shadow:
+        0 0 0 4px rgba(215, 170, 40, 0.1);
+    }
+
+    .dk-search-form > i {
+      flex-shrink: 0;
+      color: #9299a5;
+      font-size: 14px;
+    }
+
+    .dk-search-form input {
+      min-width: 0;
+      flex: 1;
+      height: 48px;
+      padding: 0 15px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--header-text);
+      font-size: 13px;
+    }
+
+    .dk-search-form input::placeholder {
+      color: #969da8;
+    }
+
+    .dk-search-submit {
+      align-self: stretch;
+      min-width: 104px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 20px;
+      border: 0;
+      background: var(--header-gold);
+      color: #162239;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition:
+        background 0.22s ease,
+        color 0.22s ease;
+    }
+
+    .dk-search-submit:hover {
+      background: var(--header-gold-hover);
+      color: #ffffff;
+    }
+
+    /* =========================================================
+       HEADER ACTIONS
+    ========================================================= */
+
+    .dk-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .dk-action {
+      position: relative;
+      min-width: 54px;
+      min-height: 55px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #465164;
+      cursor: pointer;
+      transition:
+        background 0.22s ease,
+        color 0.22s ease,
+        transform 0.22s ease;
+    }
+
+    .dk-action:hover {
+      background: #f5f7f9;
+      color: var(--header-navy);
+      transform: translateY(-1px);
+    }
+
+    .dk-action-icon {
+      position: relative;
+      width: 31px;
+      height: 31px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e1e4e8;
+      border-radius: 50%;
+      background: #ffffff;
+      font-size: 13px;
+      transition:
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
+    }
+
+    .dk-action:hover .dk-action-icon {
+      border-color: rgba(215, 170, 40, 0.58);
+      box-shadow:
+        0 7px 18px rgba(16, 35, 63, 0.08);
+    }
+
+    .dk-action-label {
+      color: inherit;
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .dk-cart-action {
+      min-width: 76px;
+      padding-inline: 12px;
+      border-radius: 13px;
+      background: var(--header-navy);
+      color: #ffffff;
+    }
+
+    .dk-cart-action:hover {
+      background: var(--header-navy-hover);
+      color: #ffffff;
+    }
+
+    .dk-cart-action .dk-action-icon {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+    }
+
+    .dk-cart-action .dk-action-label {
+      color: #ffffff;
+    }
+
+    .dk-cart-badge {
+      position: absolute;
+      top: -7px;
+      right: -8px;
+      min-width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+      border: 2px solid #ffffff;
+      border-radius: 999px;
+      background: var(--header-orange);
+      color: #ffffff;
+      font-size: 8px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    /* =========================================================
+       DROPDOWN
+    ========================================================= */
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      z-index: 1200;
+      width: 240px;
+      padding: 10px;
+      border: 1px solid var(--header-border);
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow:
+        0 24px 60px rgba(16, 35, 63, 0.16);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      visibility: hidden;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+    }
+
+    .dropdown-menu::before {
+      position: absolute;
+      top: -7px;
+      right: 25px;
+      width: 13px;
+      height: 13px;
+      border-top: 1px solid var(--header-border);
+      border-left: 1px solid var(--header-border);
+      background: #ffffff;
+      content: "";
+      transform: rotate(45deg);
+    }
+
+    .dropdown:hover .dropdown-menu,
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .dk-dropdown-profile {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 7px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f6f7f9;
+    }
+
+    .dk-dropdown-avatar {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #fff1e9;
+      color: var(--header-orange);
+      font-size: 14px;
+    }
+
+    .dk-dropdown-profile-text {
+      min-width: 0;
+    }
+
+    .dk-dropdown-profile strong,
+    .dk-dropdown-profile small {
+      display: block;
+    }
+
+    .dk-dropdown-profile strong {
+      overflow: hidden;
+      color: var(--header-text);
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dk-dropdown-profile small {
+      margin-top: 3px;
+      overflow: hidden;
+      color: var(--header-muted);
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dropdown-menu > a {
+      position: relative;
+      z-index: 1;
+      min-height: 39px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 11px;
+      border-radius: 9px;
+      color: #4c586b;
+      font-size: 11px;
+      font-weight: 600;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .dropdown-menu > a i {
+      width: 16px;
+      color: #8c95a2;
+      text-align: center;
+    }
+
+    .dropdown-menu > a:hover {
+      background: #f5f7f9;
+      color: var(--header-navy);
+    }
+
+    .dropdown-menu > a:hover i {
+      color: var(--header-gold-hover);
+    }
+
+    .dropdown-menu > .dk-logout-link {
+      color: #d94b4b;
+    }
+
+    .dropdown-menu > .dk-logout-link i {
+      color: #d94b4b;
+    }
+
+    .dk-dropdown-divider {
+      height: 1px;
+      margin: 7px 4px;
+      background: #edf0f3;
+    }
+
+    /* =========================================================
+       CATEGORY NAVIGATION
+    ========================================================= */
+
+    .dk-category-nav {
+      border-top: 1px solid #edf0f3;
+      background: #ffffff;
+    }
+
+    .dk-category-nav-inner {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .dk-category-nav a {
+      position: relative;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 17px;
+      color: #4f5a6b;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition:
+        color 0.22s ease,
+        background 0.22s ease;
+    }
+
+    .dk-category-nav a::after {
+      position: absolute;
+      right: 17px;
+      bottom: 0;
+      left: 17px;
+      height: 2px;
+      border-radius: 999px 999px 0 0;
+      background: var(--header-gold);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.22s ease;
+    }
+
+    .dk-category-nav a i {
+      color: var(--header-orange);
+      font-size: 10px;
+    }
+
+    .dk-category-nav a:hover {
+      background: #faf9f4;
+      color: var(--header-navy);
+    }
+
+    .dk-category-nav a:hover::after,
+    .dk-category-nav a.active::after {
+      transform: scaleX(1);
+    }
+
+    .dk-bulk-nav-link {
+      margin-left: 7px;
+      min-height: 36px !important;
+      padding: 0 16px !important;
+      border: 1px solid rgba(215, 170, 40, 0.48);
+      border-radius: 999px;
+      background: rgba(215, 170, 40, 0.08);
+      color: #8b6912 !important;
+    }
+
+    .dk-bulk-nav-link::after {
+      display: none;
+    }
+
+    .dk-bulk-nav-link:hover {
+      border-color: var(--header-gold);
+      background: var(--header-gold) !important;
+      color: #172033 !important;
+    }
+
+    /* =========================================================
+       MOBILE BUTTONS
+    ========================================================= */
+
+    .dk-search-toggle,
+    .hamburger {
+      width: 43px;
+      height: 43px;
+      flex: 0 0 43px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--header-border);
+      border-radius: 12px;
+      background: #ffffff;
+      color: var(--header-navy);
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .dk-mobile-search-panel {
+      display: none;
+      padding: 0 0 15px;
+      background: #ffffff;
+    }
+
+    .dk-mobile-search-panel .dk-search-form {
+      min-height: 47px;
+    }
+
+    /* =========================================================
+       FLASH MESSAGES
+    ========================================================= */
+
+    .dk-alert-wrap {
+      position: relative;
+      z-index: 1050;
+    }
+
+    .alert {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border: 0;
+      border-left: 4px solid;
+      font-size: 12px;
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    }
+
+    .alert-success {
+      border-color: #1ba46b;
+      background: #eaf8f1;
+      color: #126b49;
+    }
+
+    .alert-error {
+      border-color: #d94b4b;
+      background: #fff0f0;
+      color: #9f2f2f;
+    }
+
+    .alert-hiding {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    .alert-close {
+      margin-left: auto;
+      padding: 5px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* =========================================================
+       TABLET
+    ========================================================= */
+
+    @media (max-width: 1100px) {
+      .dk-header-main {
+        grid-template-columns:
+          minmax(180px, auto)
+          minmax(260px, 1fr)
+          auto;
+        gap: 19px;
+      }
+
+      .dk-action {
+        min-width: 48px;
+        padding-inline: 5px;
+      }
+
+      .dk-action-label {
+        display: none;
+      }
+
+      .dk-cart-action {
+        min-width: 52px;
+      }
+
+      .dk-category-nav a {
+        padding-inline: 12px;
+        font-size: 10px;
+      }
+    }
+
+    /* =========================================================
+       MOBILE NAVIGATION
+    ========================================================= */
+
+    @media (max-width: 860px) {
+      .dk-topbar-inner {
+        min-height: 34px;
+      }
+
+      .dk-topbar-contact a:nth-child(2) {
+        display: none;
+      }
+
+      .dk-topbar-offer span {
+        display: none;
+      }
+
+      .dk-header-main {
+        min-height: 72px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .dk-brand {
+        margin-right: auto;
+      }
+
+      .dk-brand-mark {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+        border-radius: 12px;
+      }
+
+      .dk-brand-name {
+        font-size: 21px;
+      }
+
+      .dk-brand-tagline {
+        display: none;
+      }
+
+      .dk-header-search {
+        display: none;
+      }
+
+      .dk-header-actions .dk-track-action,
+      .dk-header-actions .dk-wishlist-action {
+        display: none;
+      }
+
+      .dk-header-actions {
+        gap: 6px;
+      }
+
+      .dk-action {
+        width: 43px;
+        min-width: 43px;
+        min-height: 43px;
+        padding: 0;
+        border: 1px solid var(--header-border);
+        border-radius: 12px;
+      }
+
+      .dk-action-icon {
+        width: auto;
+        height: auto;
+        border: 0;
+        background: transparent;
+      }
+
+      .dk-action-label {
+        display: none;
+      }
+
+      .dk-cart-action {
+        background: var(--header-navy);
+      }
+
+      .dk-search-toggle,
+      .hamburger {
+        display: inline-flex;
+      }
+
+      .dk-mobile-search-panel {
+        display: block;
+        max-height: 0;
+        padding: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          max-height 0.3s ease,
+          padding 0.3s ease,
+          opacity 0.25s ease;
+      }
+
+      .dk-mobile-search-panel.open {
+        max-height: 90px;
+        padding: 0 0 15px;
+        opacity: 1;
+      }
+
+      .dk-category-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1300;
+        width: min(360px, 88vw);
+        padding-top: 88px;
+        border-top: 0;
+        box-shadow:
+          -25px 0 65px rgba(16, 35, 63, 0.2);
+        transform: translateX(110%);
+        transition: transform 0.3s ease;
+        overflow-y: auto;
+      }
+
+      .dk-category-nav.mobile-open {
+        transform: translateX(0);
+      }
+
+      .dk-category-nav-inner {
+        width: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px 20px 30px;
+      }
+
+      .dk-category-nav a {
+        min-height: 50px;
+        justify-content: flex-start;
+        padding: 0 13px;
+        border-bottom: 1px solid #edf0f3;
+        font-size: 12px;
+      }
+
+      .dk-category-nav a::after {
+        display: none;
+      }
+
+      .dk-bulk-nav-link {
+        margin: 18px 0 0;
+        min-height: 46px !important;
+        justify-content: center !important;
+        border-bottom: 1px solid rgba(215, 170, 40, 0.48) !important;
+      }
+
+      .dropdown-menu {
+        position: fixed;
+        top: 76px;
+        right: 18px;
+      }
+    }
+
+    /* =========================================================
+       SMALL MOBILE
+    ========================================================= */
+
+    @media (max-width: 540px) {
+      .dk-header-container {
+        width: min(
+          100% - 24px,
+          var(--header-container)
+        );
+      }
+
+      .dk-topbar-contact {
+        gap: 8px;
+      }
+
+      .dk-topbar-contact a {
+        font-size: 9px;
+      }
+
+      .dk-topbar-offer {
+        font-size: 9px;
+      }
+
+      .dk-brand-mark {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        font-size: 16px;
+      }
+
+      .dk-brand-name {
+        font-size: 18px;
+      }
+
+      .dk-header-actions .dropdown {
+        display: none;
+      }
+
+      .dk-search-toggle,
+      .hamburger,
+      .dk-action {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        flex-basis: 40px;
+      }
+
+      .dk-search-submit {
+        min-width: 48px;
+        padding-inline: 14px;
+      }
+
+      .dk-search-submit span {
+        display: none;
+      }
+
+      .dk-mobile-search-panel {
+        padding-inline: 0;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .dk-brand-copy {
+        display: none;
+      }
+
+      .dk-header-main {
+        justify-content: flex-end;
+      }
+
+      .dk-brand {
+        margin-right: auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- Announcement Bar -->
-<div class="top-bar">
-  <div class="container top-bar-inner">
+<%
+  const currentUser =
+    typeof user !== 'undefined' && user
+      ? user
+      : null;
 
-    <div class="top-bar-contact">
+  const safeCartCount =
+    typeof cartCount !== 'undefined' &&
+    Number.isFinite(Number(cartCount))
+      ? Number(cartCount)
+      : 0;
+
+  const currentPath =
+    typeof path !== 'undefined' && path
+      ? path
+      : '';
+
+  const userDisplayName =
+    currentUser && (
+      currentUser.name ||
+      currentUser.full_name ||
+      currentUser.username
+    )
+      ? (
+          currentUser.name ||
+          currentUser.full_name ||
+          currentUser.username
+        )
+      : 'My Account';
+
+  const userEmail =
+    currentUser && currentUser.email
+      ? currentUser.email
+      : 'Manage your account';
+%>
+
+<!-- =======================================================
+     TOP BAR
+======================================================= -->
+
+<div class="dk-topbar">
+  <div class="dk-header-container dk-topbar-inner">
+
+    <div class="dk-topbar-contact">
       <a href="tel:+917877681385">
         <i class="fa-solid fa-phone"></i>
         <span>+91 7877681385</span>
       </a>
 
       <a href="mailto:Dresskartindia@gmail.com">
-        <i class="fa-solid fa-envelope"></i>
+        <i class="fa-regular fa-envelope"></i>
         <span>Dresskartindia@gmail.com</span>
       </a>
     </div>
 
-    <div class="top-bar-offer">
+    <div class="dk-topbar-offer">
       <i class="fa-solid fa-truck-fast"></i>
       <span>Free shipping on orders above ₹999</span>
+      <strong>Pan India Delivery</strong>
     </div>
 
   </div>
 </div>
 
-<!-- Main Header -->
-<header class="site-header">
+<!-- =======================================================
+     MAIN HEADER
+======================================================= -->
 
-  <div class="container header-main">
+<header class="dk-site-header navbar">
+
+  <div class="dk-header-container dk-header-main">
 
     <!-- Brand -->
-    <a href="/" class="brand" aria-label="DressKart India Home">
-
-      <span class="brand-symbol">
+    <a
+      href="/"
+      class="dk-brand"
+      aria-label="DressKart India homepage"
+    >
+      <span class="dk-brand-mark">
         <i class="fa-solid fa-shirt"></i>
       </span>
 
-      <span class="brand-content">
-        <span class="brand-name">
+      <span class="dk-brand-copy">
+        <strong class="dk-brand-name">
           Dress<span>Kart</span>
-        </span>
+        </strong>
 
-        <span class="brand-tagline">
+        <small class="dk-brand-tagline">
           Uniforms & Accessories
-        </span>
+        </small>
       </span>
-
     </a>
 
     <!-- Desktop Search -->
-    <div class="nav-search">
-
+    <div class="dk-header-search">
       <form
         action="/products"
         method="GET"
-        class="search-form"
+        class="dk-search-form"
+        role="search"
       >
-
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <i class="fa-solid fa-magnifying-glass"></i>
 
         <input
-          type="text"
+          type="search"
           name="search"
           placeholder="Search uniforms, caps, bags..."
-          value="<%= typeof filters !== 'undefined' && filters.search ? filters.search : '' %>"
           autocomplete="off"
+          aria-label="Search DressKart products"
         >
 
-        <button type="submit">
-          Search
+        <button
+          type="submit"
+          class="dk-search-submit"
+          data-no-loading="true"
+        >
+          <span>Search</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </button>
-
       </form>
-
     </div>
 
     <!-- Header Actions -->
-    <div class="nav-actions">
+    <nav
+      class="dk-header-actions"
+      aria-label="Account and cart navigation"
+    >
 
-      <% if (user) { %>
+      <!-- Search Toggle -->
+      <button
+        type="button"
+        class="dk-search-toggle"
+        id="headerSearchToggle"
+        aria-label="Open search"
+      >
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
 
-        <div class="dropdown user-dropdown">
+      <!-- Account -->
+      <div class="dropdown">
 
-          <button
-            type="button"
-            class="nav-action-btn dropdown-trigger"
-            aria-label="Open account menu"
-          >
-            <span class="action-icon">
-              <i class="fa-regular fa-user"></i>
-            </span>
-
-            <span class="action-content">
-              <small>Hello</small>
-              <strong><%= user.name.split(' ')[0] %></strong>
-            </span>
-
-            <i class="fa-solid fa-chevron-down action-arrow"></i>
-          </button>
-
-          <div class="dropdown-menu">
-
-            <div class="dropdown-user-heading">
-              <span class="dropdown-avatar">
-                <i class="fa-solid fa-user"></i>
-              </span>
-
-              <div>
-                <strong><%= user.name %></strong>
-                <small>Welcome to DressKart</small>
-              </div>
-            </div>
-
-            <% if (user.role === 'admin') { %>
-              <a href="/admin">
-                <i class="fa-solid fa-chart-line"></i>
-                Admin Panel
-              </a>
-            <% } %>
-
-            <a href="/orders/my-orders">
-              <i class="fa-solid fa-box-open"></i>
-              My Orders
-            </a>
-
-            <a href="/auth/logout" class="logout-link">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              Logout
-            </a>
-
-          </div>
-
-        </div>
-
-      <% } else { %>
-
-        <a href="/auth/login" class="nav-action-btn login-action">
-
-          <span class="action-icon">
+        <button
+          type="button"
+          class="dk-action dropdown-trigger"
+          aria-label="Open account menu"
+        >
+          <span class="dk-action-icon">
             <i class="fa-regular fa-user"></i>
           </span>
 
-          <span class="action-content">
-            <small>Hello</small>
-            <strong>Login</strong>
+          <span class="dk-action-label">
+            <%= currentUser ? 'Account' : 'Login' %>
           </span>
+        </button>
 
-        </a>
+        <div class="dropdown-menu">
 
-      <% } %>
+          <div class="dk-dropdown-profile">
+            <span class="dk-dropdown-avatar">
+              <i class="fa-regular fa-user"></i>
+            </span>
 
-      <a href="/orders/my-orders" class="nav-action-btn orders-action">
+            <span class="dk-dropdown-profile-text">
+              <strong><%= userDisplayName %></strong>
+              <small><%= userEmail %></small>
+            </span>
+          </div>
 
-        <span class="action-icon">
-          <i class="fa-solid fa-box"></i>
+          <% if (currentUser) { %>
+
+            <a href="/account">
+              <i class="fa-regular fa-user"></i>
+              My Account
+            </a>
+
+            <a href="/orders">
+              <i class="fa-solid fa-box"></i>
+              My Orders
+            </a>
+
+            <a href="/track-order">
+              <i class="fa-solid fa-location-dot"></i>
+              Track Order
+            </a>
+
+            <div class="dk-dropdown-divider"></div>
+
+            <a
+              href="/auth/logout"
+              class="dk-logout-link"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+            </a>
+
+          <% } else { %>
+
+            <a href="/auth/login">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              Login
+            </a>
+
+            <a href="/auth/register">
+              <i class="fa-solid fa-user-plus"></i>
+              Create Account
+            </a>
+
+            <a href="/track-order">
+              <i class="fa-solid fa-location-dot"></i>
+              Track Order
+            </a>
+
+          <% } %>
+
+        </div>
+      </div>
+
+      <!-- Track Order -->
+      <a
+        href="/track-order"
+        class="dk-action dk-track-action"
+      >
+        <span class="dk-action-icon">
+          <i class="fa-solid fa-location-dot"></i>
         </span>
 
-        <span class="action-content">
-          <small>Track</small>
-          <strong>Orders</strong>
+        <span class="dk-action-label">
+          Track
         </span>
-
       </a>
 
-      <a href="/cart" class="cart-action">
+      <!-- Wishlist -->
+      <a
+        href="<%= currentUser ? '/wishlist' : '/auth/login' %>"
+        class="dk-action dk-wishlist-action"
+      >
+        <span class="dk-action-icon">
+          <i class="fa-regular fa-heart"></i>
+        </span>
 
-        <span class="cart-icon-wrap">
+        <span class="dk-action-label">
+          Wishlist
+        </span>
+      </a>
+
+      <!-- Cart -->
+      <a
+        href="/cart"
+        class="dk-action dk-cart-action"
+      >
+        <span class="dk-action-icon">
           <i class="fa-solid fa-bag-shopping"></i>
 
-          <% if (cartCount > 0) { %>
-            <span class="cart-badge">
-              <%= cartCount %>
-            </span>
-          <% } %>
+          <span class="dk-cart-badge cart-badge">
+            <%= safeCartCount %>
+          </span>
         </span>
 
-        <span>
+        <span class="dk-action-label">
           Cart
         </span>
-
       </a>
 
+      <!-- Hamburger -->
       <button
         type="button"
         class="hamburger"
         id="hamburger"
         aria-label="Open navigation menu"
         aria-expanded="false"
+        aria-controls="catNav"
       >
         <i class="fa-solid fa-bars"></i>
       </button>
 
-    </div>
+    </nav>
 
   </div>
 
   <!-- Mobile Search -->
-  <div class="mobile-search container">
+  <div
+    class="dk-mobile-search-panel"
+    id="headerSearchPanel"
+  >
+    <div class="dk-header-container">
 
-    <form action="/products" method="GET" class="search-form">
-
-      <i class="fa-solid fa-magnifying-glass search-icon"></i>
-
-      <input
-        type="text"
-        name="search"
-        placeholder="Search DressKart..."
-        value="<%= typeof filters !== 'undefined' && filters.search ? filters.search : '' %>"
+      <form
+        action="/products"
+        method="GET"
+        class="dk-search-form"
+        role="search"
       >
+        <i class="fa-solid fa-magnifying-glass"></i>
 
-      <button type="submit">
-        <i class="fa-solid fa-arrow-right"></i>
-      </button>
+        <input
+          type="search"
+          name="search"
+          placeholder="Search uniforms, caps, bags..."
+          autocomplete="off"
+          aria-label="Search DressKart products"
+        >
 
-    </form>
+        <button
+          type="submit"
+          class="dk-search-submit"
+          data-no-loading="true"
+        >
+          <span>Search</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
 
+    </div>
   </div>
 
   <!-- Category Navigation -->
-  <nav class="cat-nav" id="catNav">
+  <nav
+    class="dk-category-nav cat-nav"
+    id="catNav"
+    aria-label="Product categories"
+  >
+    <div class="dk-header-container dk-category-nav-inner">
 
-    <div class="container category-nav-inner">
-
-      <a href="/" class="category-home">
+      <a
+        href="/"
+        class="<%= currentPath === '/' ? 'active' : '' %>"
+      >
         <i class="fa-solid fa-house"></i>
         Home
       </a>
@@ -272,7 +1373,7 @@
 
       <a href="/products?category=petroleum-uniforms">
         <i class="fa-solid fa-shirt"></i>
-        Uniforms
+        Petroleum Uniforms
       </a>
 
       <a href="/products?category=caps-headwear">
@@ -281,80 +1382,33 @@
       </a>
 
       <a href="/products?category=bags-accessories">
-        <i class="fa-solid fa-bag-shopping"></i>
+        <i class="fa-solid fa-briefcase"></i>
         Bags & Accessories
       </a>
 
+      <a href="/products?category=safety-wear">
+        <i class="fa-solid fa-helmet-safety"></i>
+        Safety Wear
+      </a>
+
       <a href="/about">
-        <i class="fa-regular fa-building"></i>
-        About Us
+        About
       </a>
 
       <a href="/contact">
-        <i class="fa-regular fa-comments"></i>
         Contact
       </a>
 
-      <a href="/contact" class="bulk-nav-link">
+      <a
+        href="/contact?type=bulk-order"
+        class="dk-bulk-nav-link"
+      >
         <i class="fa-solid fa-boxes-stacked"></i>
         Bulk Orders
       </a>
 
     </div>
-
   </nav>
 
 </header>
 
-<!-- Flash Messages -->
-<div class="flash-container">
-
-  <% if (success && success.length > 0) { %>
-
-    <div class="alert alert-success">
-
-      <span class="alert-icon">
-        <i class="fa-solid fa-check"></i>
-      </span>
-
-      <span class="alert-message">
-        <%= success %>
-      </span>
-
-      <button
-        type="button"
-        class="alert-close"
-        aria-label="Close message"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-    </div>
-
-  <% } %>
-
-  <% if (error && error.length > 0) { %>
-
-    <div class="alert alert-error">
-
-      <span class="alert-icon">
-        <i class="fa-solid fa-exclamation"></i>
-      </span>
-
-      <span class="alert-message">
-        <%= error %>
-      </span>
-
-      <button
-        type="button"
-        class="alert-close"
-        aria-label="Close message"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-    </div>
-
-  <% } %>
-
-</div>
