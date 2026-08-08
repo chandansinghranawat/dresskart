@@ -1051,7 +1051,6 @@ button {
   transform: rotate(45deg);
 }
 
-.dropdown:hover .dropdown-menu,
 .dropdown.open .dropdown-menu {
   opacity: 1;
   pointer-events: auto;
@@ -4037,6 +4036,75 @@ h1, h2, h3, h4, .brand-name {
   background: var(--lux-black);
   border-color: var(--lux-black);
   color: white !important;
+}
+
+.dk-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.dk-brand-logo {
+  width: 190px;
+  height: 120px;
+  object-fit: contain;
+  display: block;
+}
+
+/* =========================================================
+   FOOTER DRESSKART LOGO
+========================================================= */
+
+.footer-logo-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.footer-logo {
+  display: block;
+  width: 210px;
+  height: 85px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .footer-logo {
+    width: 190px;
+    height: 75px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .footer-logo {
+    width: 175px;
+    height: 70px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .footer-logo {
+    width: 155px;
+    height: 62px;
+  }
+}
+
+@media (max-width: 860px) {
+  .dk-brand-logo {
+    width: 145px;
+    height: 55px;
+  }
+}
+
+@media (max-width: 540px) {
+  .dk-brand-logo {
+    width: 120px;
+    height: 48px;
+  }
 }
 
 .btn-white {
@@ -7937,4 +8005,13 @@ textarea,
   .dk-section-title {
     letter-spacing: -0.03em;
   }
+}
+
+.dk-category-nav a.active {
+  background: #faf9f4;
+  color: var(--header-navy);
+}
+
+.dk-category-nav a.active::after {
+  transform: scaleX(1);
 }

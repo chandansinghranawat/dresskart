@@ -178,7 +178,7 @@
       backdrop-filter: blur(16px);
       transition:
         box-shadow 0.25s ease,
-        background 0.25s ease;
+        *background* 0.25s ease;
     }
 
     .dk-site-header.navbar-scrolled {
@@ -289,7 +289,7 @@
       transition:
         border-color 0.22s ease,
         box-shadow 0.22s ease,
-        background 0.22s ease;
+        *background* 0.22s ease;
     }
 
     .dk-search-form:focus-within {
@@ -336,7 +336,7 @@
       font-weight: 800;
       cursor: pointer;
       transition:
-        background 0.22s ease,
+        *background* 0.22s ease,
         color 0.22s ease;
     }
 
@@ -372,7 +372,7 @@
       color: #465164;
       cursor: pointer;
       transition:
-        background 0.22s ease,
+        *background* 0.22s ease,
         color 0.22s ease,
         transform 0.22s ease;
     }
@@ -569,7 +569,7 @@
       font-size: 11px;
       font-weight: 600;
       transition:
-        background 0.2s ease,
+        *background* 0.2s ease,
         color 0.2s ease;
     }
 
@@ -633,7 +633,7 @@
       white-space: nowrap;
       transition:
         color 0.22s ease,
-        background 0.22s ease;
+        *background* 0.22s ease;
     }
 
     .dk-category-nav a::after {
@@ -1030,6 +1030,311 @@
         margin-right: auto;
       }
     }
+  
+
+    /* =========================================================
+       ACTIVE NAVIGATION STATE
+       Same visual as the existing hover state
+    ========================================================= */
+
+    .dk-category-nav a.active {
+      background: #faf9f4;
+      color: var(--header-navy);
+    }
+
+    .dk-category-nav a.active::after {
+      transform: scaleX(1);
+    }
+
+    /* =========================================================
+       PETROLEUM UNIFORMS DROPDOWN
+    ========================================================= */
+
+    .dk-petroleum-dropdown {
+      position: relative;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown .dk-petroleum-main-link {
+      position: relative;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 17px;
+      color: #4f5a6b;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition:
+        color 0.22s ease,
+        background 0.22s ease;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown .dk-petroleum-main-link > i:first-child {
+      color: var(--header-orange);
+      font-size: 10px;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown .dk-petroleum-arrow {
+      margin-left: 2px;
+      color: #8b93a1;
+      font-size: 8px;
+      transition: transform 0.24s ease;
+    }
+
+    .dk-petroleum-dropdown:hover .dk-petroleum-main-link,
+    .dk-petroleum-dropdown.open .dk-petroleum-main-link,
+    .dk-petroleum-dropdown:focus-within .dk-petroleum-main-link {
+      background: #faf9f4;
+      color: var(--header-navy);
+    }
+
+    .dk-petroleum-dropdown:hover .dk-petroleum-arrow,
+    .dk-petroleum-dropdown.open .dk-petroleum-arrow,
+    .dk-petroleum-dropdown:focus-within .dk-petroleum-arrow {
+      transform: rotate(180deg);
+    }
+
+    .dk-category-nav .dk-petroleum-main-link::after {
+      position: absolute;
+      right: 17px;
+      bottom: 0;
+      left: 17px;
+      height: 2px;
+      border-radius: 999px 999px 0 0;
+      background: var(--header-gold);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.22s ease;
+    }
+
+    .dk-petroleum-dropdown:hover .dk-petroleum-main-link::after,
+    .dk-petroleum-dropdown.open .dk-petroleum-main-link::after,
+    .dk-petroleum-dropdown:focus-within .dk-petroleum-main-link::after,
+    .dk-petroleum-main-link.active::after {
+      transform: scaleX(1);
+    }
+
+    .dk-petroleum-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      z-index: 1500;
+      width: 272px;
+      padding: 10px;
+      border: 1px solid var(--header-border);
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 24px 60px rgba(16, 35, 63, 0.16);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate(-50%, 10px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+    }
+
+    .dk-petroleum-dropdown-menu::before {
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      width: 13px;
+      height: 13px;
+      border-top: 1px solid var(--header-border);
+      border-left: 1px solid var(--header-border);
+      background: #ffffff;
+      content: "";
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .dk-petroleum-dropdown:hover .dk-petroleum-dropdown-menu,
+    .dk-petroleum-dropdown.open .dk-petroleum-dropdown-menu,
+    .dk-petroleum-dropdown:focus-within .dk-petroleum-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+
+    .dk-petroleum-dropdown-title {
+      position: relative;
+      z-index: 1;
+      padding: 7px 10px 9px;
+      color: #9299a5;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown-menu a::after {
+      display: none;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-company {
+      position: relative;
+      z-index: 1;
+      min-height: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 11px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      color: #24334a;
+      font-size: 11px;
+      font-weight: 700;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-company:hover,
+    .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-company.active {
+      background: #f6f7f9;
+      color: var(--header-navy);
+      transform: translateX(2px);
+    }
+
+    .dk-company-logo {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 5px 14px rgba(16, 35, 63, 0.12);
+    }
+
+    .dk-company-hpcl { background: #2474c8; }
+    .dk-company-bpcl { background: #188647; }
+    .dk-company-iocl { background: #f47621; }
+    .dk-company-essar { background: #10294a; }
+    .dk-company-reliance { background: #10294a; }
+
+    .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-view-all {
+      position: relative;
+      z-index: 1;
+      min-height: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 7px;
+      padding: 8px 10px;
+      border-top: 1px solid #edf0f3;
+      border-radius: 8px;
+      color: #9a7415;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-view-all:hover {
+      background: rgba(215, 170, 40, 0.09);
+      color: #7d5b08;
+    }
+
+    /* =========================================================
+       CUSTOMIZE UNIFORM NAV ITEM
+    ========================================================= */
+
+    .dk-customize-uniform-link i {
+      color: var(--header-orange) !important;
+    }
+
+    .dk-customize-uniform-link.active {
+      background: #faf9f4;
+      color: var(--header-navy);
+    }
+
+    /* =========================================================
+       PETROLEUM DROPDOWN - MOBILE / TABLET
+    ========================================================= */
+
+    @media (max-width: 860px) {
+      .dk-petroleum-dropdown {
+        width: 100%;
+        min-height: auto;
+        display: block;
+        border-bottom: 1px solid #edf0f3;
+      }
+
+      .dk-category-nav .dk-petroleum-dropdown .dk-petroleum-main-link {
+        width: 100%;
+        min-height: 50px;
+        justify-content: flex-start;
+        padding: 0 13px;
+        border-bottom: 0;
+      }
+
+      .dk-category-nav .dk-petroleum-dropdown .dk-petroleum-main-link::after {
+        display: none;
+      }
+
+      .dk-petroleum-arrow {
+        margin-left: auto !important;
+      }
+
+      .dk-petroleum-dropdown-menu {
+        position: static;
+        width: 100%;
+        padding: 5px 8px 10px 22px;
+        border: 0;
+        border-radius: 0;
+        background: #fafbfc;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+        display: none;
+      }
+
+      .dk-petroleum-dropdown-menu::before {
+        display: none;
+      }
+
+      .dk-petroleum-dropdown:hover .dk-petroleum-dropdown-menu,
+      .dk-petroleum-dropdown.open .dk-petroleum-dropdown-menu,
+      .dk-petroleum-dropdown:focus-within .dk-petroleum-dropdown-menu {
+        display: block;
+        transform: none;
+      }
+
+      .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-company {
+        min-height: 44px;
+        justify-content: flex-start;
+        padding: 6px 9px;
+        border-bottom: 0;
+        font-size: 11px;
+      }
+
+      .dk-company-logo {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+        font-size: 9px;
+      }
+
+      .dk-category-nav .dk-petroleum-dropdown-menu .dk-petroleum-view-all {
+        min-height: 40px;
+        justify-content: center;
+        border-bottom: 0;
+      }
+    }
+
   </style>
 </head>
 
@@ -1108,25 +1413,14 @@
   <div class="dk-header-container dk-header-main">
 
     <!-- Brand -->
-    <a
-      href="/"
-      class="dk-brand"
-      aria-label="DressKart India homepage"
-    >
-      <span class="dk-brand-mark">
-        <i class="fa-solid fa-shirt"></i>
-      </span>
-
-      <span class="dk-brand-copy">
-        <strong class="dk-brand-name">
-          Dress<span>Kart</span>
-        </strong>
-
-        <small class="dk-brand-tagline">
-          Uniforms & Accessories
-        </small>
-      </span>
-    </a>
+  <!-- Brand -->
+<a href="/" class="dk-brand" aria-label="DressKart India homepage">
+  <img
+    src="/img/ChatGPT Image Aug 7, 2026, 02_24_24 PM.png"
+    alt="DressKart India"
+    class="dk-brand-logo"
+  >
+</a>
 
     <!-- Desktop Search -->
     <div class="dk-header-search">
@@ -1350,65 +1644,210 @@
     </div>
   </div>
 
-  <!-- Category Navigation -->
-  <nav
-    class="dk-category-nav cat-nav"
-    id="catNav"
-    aria-label="Product categories"
-  >
-    <div class="dk-header-container dk-category-nav-inner">
+<!-- =======================================================
+     CATEGORY NAVIGATION
+======================================================= -->
+
+<nav
+  class="dk-category-nav cat-nav"
+  id="catNav"
+  aria-label="Product categories"
+>
+  <div class="dk-header-container dk-category-nav-inner">
+
+    <!-- HOME -->
+    <a
+      href="/"
+      class="<%= currentPath === '/' ? 'active' : '' %>"
+    >
+      <i class="fa-solid fa-house"></i>
+      Home
+    </a>
+
+
+    <!-- ALL PRODUCTS -->
+    <a href="/products">
+      <i class="fa-solid fa-border-all"></i>
+      All Products
+    </a>
+
+
+    <!-- ===================================================
+         PETROLEUM UNIFORMS DROPDOWN
+    ==================================================== -->
+
+    <div class="dk-petroleum-dropdown">
 
       <a
-        href="/"
-        class="<%= currentPath === '/' ? 'active' : '' %>"
+        href="/products?category=petroleum-uniforms"
+        class="dk-petroleum-main-link"
       >
-        <i class="fa-solid fa-house"></i>
-        Home
-      </a>
-
-      <a href="/products">
-        <i class="fa-solid fa-border-all"></i>
-        All Products
-      </a>
-
-      <a href="/products?category=petroleum-uniforms">
         <i class="fa-solid fa-shirt"></i>
-        Petroleum Uniforms
+
+        <span>
+          Petroleum Uniforms
+        </span>
+
+        <i
+          class="fa-solid fa-chevron-down dk-petroleum-arrow"
+        ></i>
       </a>
 
-      <a href="/products?category=caps-headwear">
-        <i class="fa-solid fa-hat-cowboy"></i>
-        Caps & Headwear
-      </a>
 
-      <a href="/products?category=bags-accessories">
-        <i class="fa-solid fa-briefcase"></i>
-        Bags & Accessories
-      </a>
+      <!-- DROPDOWN -->
 
-      <a href="/products?category=safety-wear">
-        <i class="fa-solid fa-helmet-safety"></i>
-        Safety Wear
-      </a>
+      <div class="dk-petroleum-dropdown-menu">
 
-      <a href="/about">
-        About
-      </a>
+        <div class="dk-petroleum-dropdown-title">
+          Shop Petroleum Uniforms
+        </div>
 
-      <a href="/contact">
-        Contact
-      </a>
 
-      <a
-        href="/contact?type=bulk-order"
-        class="dk-bulk-nav-link"
-      >
-        <i class="fa-solid fa-boxes-stacked"></i>
-        Bulk Orders
-      </a>
+        <!-- HPCL -->
+
+        <a
+          href="/products?category=petroleum-uniforms&company=hpcl"
+          class="dk-petroleum-company"
+        >
+          <span class="dk-company-logo dk-company-hpcl">
+            H
+          </span>
+
+          <span>
+            HPCL
+          </span>
+        </a>
+
+
+        <!-- BPCL -->
+
+        <a
+          href="/products?category=petroleum-uniforms&company=bpcl"
+          class="dk-petroleum-company"
+        >
+          <span class="dk-company-logo dk-company-bpcl">
+            B
+          </span>
+
+          <span>
+            BPCL
+          </span>
+        </a>
+
+
+        <!-- IOCL -->
+
+        <a
+          href="/products?category=petroleum-uniforms&company=iocl"
+          class="dk-petroleum-company"
+        >
+          <span class="dk-company-logo dk-company-iocl">
+            I
+          </span>
+
+          <span>
+            IOCL
+          </span>
+        </a>
+
+
+        <!-- ESSAR OIL -->
+
+        <a
+          href="/products?category=petroleum-uniforms&company=essar-oil"
+          class="dk-petroleum-company"
+        >
+          <span class="dk-company-logo dk-company-essar">
+            E
+          </span>
+
+          <span>
+            Essar Oil
+          </span>
+        </a>
+
+
+        <!-- RELIANCE BP -->
+
+        <a
+          href="/products?category=petroleum-uniforms&company=reliance-bp"
+          class="dk-petroleum-company"
+        >
+          <span class="dk-company-logo dk-company-reliance">
+            R
+          </span>
+
+          <span>
+            Reliance BP
+          </span>
+        </a>
+
+
+        <!-- VIEW ALL -->
+
+        <a
+          href="/products?category=petroleum-uniforms"
+          class="dk-petroleum-view-all"
+        >
+          View All Petroleum Uniforms
+
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+      </div>
 
     </div>
-  </nav>
+
+
+    <!-- ===================================================
+         CUSTOMIZE UNIFORM
+         Caps + Bags removed
+    ==================================================== -->
+
+    <a
+      href="/products?category=customize-uniform"
+      class="dk-customize-uniform-link"
+    >
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+      Customize Uniform
+    </a>
+
+
+    <!-- SAFETY WEAR -->
+
+    <a href="/products?category=safety-wear">
+      <i class="fa-solid fa-helmet-safety"></i>
+      Safety Wear
+    </a>
+
+
+    <!-- ABOUT -->
+
+    <a href="/about">
+      About
+    </a>
+
+
+    <!-- CONTACT -->
+
+    <a href="/contact">
+      Contact
+    </a>
+
+
+    <!-- BULK ORDER -->
+
+    <a
+      href="/contact?type=bulk-order"
+      class="dk-bulk-nav-link"
+    >
+      <i class="fa-solid fa-boxes-stacked"></i>
+
+      Bulk Orders
+    </a>
+
+  </div>
+</nav>
 
 </header>
-
